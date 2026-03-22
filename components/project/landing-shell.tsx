@@ -23,10 +23,10 @@ export function LandingShell({ locale, dictionary }: LandingShellProps) {
         <div className="glass-panel relative overflow-hidden rounded-[2.5rem] p-8 sm:p-10">
           <div className="absolute inset-x-0 top-0 h-48 bg-gradient-to-r from-teal-200/40 via-white/0 to-orange-200/30" />
           <div className="relative">
-            <p className="text-xs uppercase tracking-[0.35em] text-[var(--color-ink-soft)]">
+            <p className="caps-label text-xs text-[var(--color-ink-soft)]">
               {copy.eyebrow}
             </p>
-            <h1 className="display-text mt-6 max-w-3xl text-5xl leading-[0.95] sm:text-7xl">
+            <h1 className="mt-6 max-w-3xl text-5xl leading-[0.95] sm:text-7xl">
               {copy.title}
             </h1>
             <p className="mt-6 max-w-2xl text-base leading-7 text-[var(--color-ink-soft)] sm:text-lg">
@@ -37,7 +37,7 @@ export function LandingShell({ locale, dictionary }: LandingShellProps) {
               <Link href={primaryHref}>
                 <Button>
                   {copy.primaryCta}
-                  <ArrowRight className="ml-2 h-4 w-4" />
+                  <ArrowRight aria-hidden="true" className="ml-2 h-4 w-4" focusable="false" />
                 </Button>
               </Link>
               <Link href={`/${locale}/login`}>
@@ -51,9 +51,13 @@ export function LandingShell({ locale, dictionary }: LandingShellProps) {
                 return (
                   <div
                     key={bullet}
-                    className="rounded-[1.75rem] border border-[var(--color-line)] bg-white/70 p-4"
+                    className="rounded-[1.75rem] border border-[var(--color-line)] bg-white/70 p-4 transition-all duration-300 hover:-translate-y-1 hover:border-[rgba(15,118,110,0.28)] hover:shadow-[0_16px_34px_rgba(16,33,43,0.1)]"
                   >
-                    <Icon className="h-5 w-5 text-[var(--color-accent-strong)]" />
+                    <Icon
+                      aria-hidden="true"
+                      className="h-5 w-5 text-[var(--color-accent-strong)]"
+                      focusable="false"
+                    />
                     <p className="mt-3 text-sm leading-6 text-[var(--color-ink-soft)]">{bullet}</p>
                   </div>
                 );
@@ -64,18 +68,18 @@ export function LandingShell({ locale, dictionary }: LandingShellProps) {
 
         <aside className="grid gap-6">
           <div className="glass-panel rounded-[2.25rem] p-6">
-            <p className="text-sm uppercase tracking-[0.3em] text-[var(--color-ink-soft)]">
+            <p className="caps-label text-sm text-[var(--color-ink-soft)]">
               {copy.studioTitle}
             </p>
             <div className="mt-5 space-y-4">
               <div className="rounded-[1.75rem] border border-[var(--color-line)] bg-[#11212b] p-4 text-white">
-                <p className="text-xs uppercase tracking-[0.25em] text-white/60">
+                <p className="caps-label text-xs text-white/60">
                   {copy.studioChatTitle}
                 </p>
                 <p className="mt-3 text-sm leading-6 text-white/80">{copy.studioChatDescription}</p>
               </div>
               <div className="rounded-[1.75rem] border border-[var(--color-line)] bg-white/75 p-4">
-                <p className="text-xs uppercase tracking-[0.25em] text-[var(--color-ink-soft)]">
+                <p className="caps-label text-xs text-[var(--color-ink-soft)]">
                   {copy.studioProcessingTitle}
                 </p>
                 <p className="mt-3 text-sm leading-6 text-[var(--color-ink-soft)]">
@@ -85,7 +89,7 @@ export function LandingShell({ locale, dictionary }: LandingShellProps) {
             </div>
           </div>
           <div className="glass-panel rounded-[2.25rem] p-6">
-            <p className="display-text text-2xl">{copy.workspaceTitle}</p>
+            <h2 className="text-2xl">{copy.workspaceTitle}</h2>
             <p className="mt-3 text-sm leading-6 text-[var(--color-ink-soft)]">{copy.workspaceDescription}</p>
           </div>
         </aside>

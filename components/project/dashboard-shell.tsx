@@ -3,6 +3,7 @@
 import { useRouter } from "next/navigation";
 import {
   Archive,
+  CheckCircle2,
   FolderOpen,
   PencilLine,
   Plus,
@@ -56,10 +57,11 @@ export function DashboardShell({
   const [sortMode, setSortMode] = useState<SortMode>("updated");
   const [visibilityMode, setVisibilityMode] = useState<VisibilityMode>("all");
   const [showArchived, setShowArchived] = useState(false);
-  const [showMobileEditor, setShowMobileEditor] = useState(false);
+  const [showEditor, setShowEditor] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [busyProjectId, setBusyProjectId] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const deferredSearch = useDeferredValue(search);
 
   const loadProjects = useEffectEvent(async () => {
@@ -105,10 +107,34 @@ export function DashboardShell({
     });
   }, [dictionary.errors, loading, user, locale, router]);
 
+  useEffect(() => {
+    if (!successMessage) {
+      return;
+    }
+
+    const timer = window.setTimeout(() => {
+      setSuccessMessage(null);
+    }, 3200);
+
+    return () => window.clearTimeout(timer);
+  }, [successMessage]);
+
   function resetForm() {
     setFormMode("create");
     setEditingProjectId(null);
     setFormValues(EMPTY_FORM);
+  }
+
+  function openCreateEditor(initialValues: ProjectFormValues = EMPTY_FORM) {
+    setFormMode("create");
+    setEditingProjectId(null);
+    setFormValues(initialValues);
+    setShowEditor(true);
+  }
+
+  function closeEditor() {
+    resetForm();
+    setShowEditor(false);
   }
 
   function startEditing(project: Project) {
@@ -120,7 +146,7 @@ export function DashboardShell({
       subject: project.subject,
       accentColor: project.accentColor,
     });
-    setShowMobileEditor(true);
+    setShowEditor(true);
   }
 
   function updateLocalProject(project: Project) {
@@ -161,8 +187,10 @@ export function DashboardShell({
 
     setSubmitting(true);
     setError(null);
+    setSuccessMessage(null);
 
     try {
+      const isCreating = formMode === "create";
       const endpoint = formMode === "create" ? "/api/projects" : `/api/projects/${editingProjectId}`;
       const method = formMode === "create" ? "POST" : "PATCH";
       const response = await fetch(endpoint, {
@@ -179,14 +207,15 @@ export function DashboardShell({
         throw new Error(data.error ?? dictionary.errors.unableToSaveProject);
       }
 
-      if (formMode === "create") {
+      if (isCreating) {
         addLocalProject(data.project);
+        setSuccessMessage(copy.createSuccess);
       } else {
         updateLocalProject(data.project);
       }
 
       resetForm();
-      setShowMobileEditor(false);
+      setShowEditor(false);
     } catch (nextError) {
       setError(
         localizeErrorMessage(
@@ -266,7 +295,7 @@ export function DashboardShell({
 
       setProjects((current) => current.filter((item) => item.project.id !== projectId));
       if (editingProjectId === projectId) {
-        resetForm();
+        closeEditor();
       }
     } catch (nextError) {
       setError(
@@ -318,6 +347,20 @@ export function DashboardShell({
     .sort((left, right) => right.project.updatedAt.localeCompare(left.project.updatedAt))
     .slice(0, 6);
   const archivedProjects = projects.filter((item) => Boolean(item.project.archivedAt));
+  const activeProjectCount = activeProjects.length;
+  const favoriteProjectCount = activeProjects.filter((item) => item.project.isFavorite).length;
+  const archivedProjectCount = archivedProjects.length;
+  const hasAnyProjects = projects.length > 0;
+  const hasAnyActiveProjects = activeProjectCount > 0;
+  const hasOnlyArchivedProjects = hasAnyProjects && !hasAnyActiveProjects;
+  const hasActiveFilters = Boolean(value) || visibilityMode === "favorites";
+  const filterPillClass = (active = false) =>
+    cn(
+      "inline-flex h-11 items-center gap-2 rounded-full border px-4 text-sm font-medium transition-all duration-200",
+      active
+        ? "border-[var(--color-ink)] bg-[var(--color-ink)] text-white shadow-[var(--shadow-soft)]"
+        : "border-[var(--color-line)] bg-white/75 text-[var(--color-ink-soft)] hover:-translate-y-0.5 hover:border-[var(--color-accent)] hover:text-[var(--color-ink)]",
+    );
 
   function renderProjectCard(item: ProjectListItem, archived = false) {
     const { project } = item;
@@ -337,7 +380,7 @@ export function DashboardShell({
               />
               <p className="truncate text-lg font-semibold">{project.name}</p>
             </div>
-            <p className="mt-2 text-xs uppercase tracking-[0.24em] text-[var(--color-ink-soft)]">
+            <p className="caps-label mt-2 text-xs text-[var(--color-ink-soft)]">
               {project.subject || copy.noSubject}
             </p>
           </div>
@@ -452,187 +495,270 @@ export function DashboardShell({
 
   return (
     <main className="mx-auto flex w-full max-w-7xl flex-1 flex-col gap-6 px-4 pb-12 pt-4 sm:px-6">
-      <section className="project-dashboard-grid">
-        <div className="space-y-6">
-          <div className="glass-panel rounded-[2.4rem] p-6 sm:p-8">
-            <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
-              <div className="max-w-3xl">
-                <p className="text-xs uppercase tracking-[0.35em] text-[var(--color-ink-soft)]">
-                  {copy.eyebrow}
-                </p>
-                <h1 className="display-text mt-4 text-4xl sm:text-5xl">{copy.title}</h1>
-                <p className="mt-4 text-sm leading-7 text-[var(--color-ink-soft)]">
-                  {copy.description}
-                </p>
-              </div>
+      {successMessage ? (
+        <div
+          className="fixed bottom-5 right-5 z-50 max-w-sm rounded-[1.5rem] border border-emerald-200 bg-[var(--color-surface-strong)] px-4 py-3 shadow-[var(--shadow-panel)] backdrop-blur"
+          role="status"
+        >
+          <div className="flex items-center gap-3">
+            <span className="inline-flex h-9 w-9 items-center justify-center rounded-full bg-[var(--color-success-soft)] text-emerald-700">
+              <CheckCircle2 className="h-4.5 w-4.5" />
+            </span>
+            <p className="text-sm font-semibold text-[var(--color-ink)]">{successMessage}</p>
+          </div>
+        </div>
+      ) : null}
 
-              <button
-                type="button"
-                className="inline-flex items-center justify-center rounded-full bg-[var(--color-ink)] px-4 py-3 text-sm font-semibold text-white sm:hidden"
-                onClick={() => {
-                  if (showMobileEditor) {
-                    setShowMobileEditor(false);
-                    return;
-                  }
-
-                  resetForm();
-                  setShowMobileEditor(true);
-                }}
-              >
-                <Plus className="mr-2 h-4 w-4" />
-                {copy.createCta}
-              </button>
+      <section className="space-y-6">
+        <div className="glass-panel rounded-[2.4rem] p-6 sm:p-8">
+          <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
+            <div className="max-w-3xl">
+              <p className="caps-label text-xs text-[var(--color-ink-soft)]">
+                {copy.eyebrow}
+              </p>
+              <h1 className="mt-4 text-4xl sm:text-5xl">{copy.title}</h1>
+              <p className="mt-4 text-sm leading-7 text-[var(--color-ink-soft)]">
+                {copy.description}
+              </p>
             </div>
 
+            <Button
+              type="button"
+              aria-controls="project-editor-panel"
+              aria-expanded={showEditor}
+              onClick={() => openCreateEditor()}
+            >
+              <Plus className="mr-2 h-4 w-4" />
+              {copy.createModeTitle}
+            </Button>
+          </div>
+
+          {hasAnyProjects ? (
             <div className="mt-8 grid gap-3 sm:grid-cols-3">
               <div className="project-summary-card">
-                <span className="project-summary-value">
-                  {projects.filter((item) => !item.project.archivedAt).length}
-                </span>
+                <span className="project-summary-value">{activeProjectCount}</span>
                 <span className="project-summary-label">{copy.activeProjects}</span>
               </div>
               <div className="project-summary-card">
-                <span className="project-summary-value">
-                  {projects.filter((item) => item.project.isFavorite && !item.project.archivedAt).length}
-                </span>
+                <span className="project-summary-value">{favoriteProjectCount}</span>
                 <span className="project-summary-label">{copy.favoritesCounter}</span>
               </div>
               <div className="project-summary-card">
-                <span className="project-summary-value">{archivedProjects.length}</span>
+                <span className="project-summary-value">{archivedProjectCount}</span>
                 <span className="project-summary-label">{copy.archivedCounter}</span>
               </div>
             </div>
-          </div>
-
-          <div className="glass-panel rounded-[2.2rem] p-5 sm:p-6">
-            <div className="flex flex-col gap-4 xl:flex-row xl:items-center xl:justify-between">
-              <div className="flex flex-1 items-center gap-3 rounded-[1.4rem] border border-[var(--color-line)] bg-white/75 px-4 py-3">
-                <Search className="h-4 w-4 text-[var(--color-ink-soft)]" />
-                <Input
-                  className="border-0 bg-transparent p-0"
-                  placeholder={copy.searchPlaceholder}
-                  value={search}
-                  onChange={(event) => setSearch(event.target.value)}
-                />
-              </div>
-
-              <div className="flex flex-wrap gap-3">
-                <div className="rounded-full border border-[var(--color-line)] bg-white/75 p-1">
-                  <button
-                    type="button"
-                    className={cn(
-                      "rounded-full px-4 py-2 text-sm font-medium",
-                      visibilityMode === "all"
-                        ? "bg-[var(--color-ink)] text-white"
-                        : "text-[var(--color-ink-soft)]",
-                    )}
-                    onClick={() => setVisibilityMode("all")}
-                  >
-                    {copy.allFilter}
-                  </button>
-                  <button
-                    type="button"
-                    className={cn(
-                      "rounded-full px-4 py-2 text-sm font-medium",
-                      visibilityMode === "favorites"
-                        ? "bg-[var(--color-ink)] text-white"
-                        : "text-[var(--color-ink-soft)]",
-                    )}
-                    onClick={() => setVisibilityMode("favorites")}
-                  >
-                    {copy.favoriteFilter}
-                  </button>
-                </div>
-
-                <label className="inline-flex items-center gap-3 rounded-full border border-[var(--color-line)] bg-white/75 px-4 py-2.5 text-sm text-[var(--color-ink-soft)]">
-                  <span>{copy.sortLabel}</span>
-                  <select
-                    className="bg-transparent text-sm text-[var(--color-ink)] outline-none"
-                    value={sortMode}
-                    onChange={(event) => setSortMode(event.target.value as SortMode)}
-                  >
-                    <option value="updated">{copy.sortUpdated}</option>
-                    <option value="name">{copy.sortName}</option>
-                    <option value="subject">{copy.sortSubject}</option>
-                  </select>
-                </label>
-
-                <Button type="button" variant="secondary" onClick={() => setShowArchived((current) => !current)}>
-                  <Archive className="mr-2 h-4 w-4" />
-                  {showArchived ? copy.archivedClose : copy.archivedToggle}
-                </Button>
-              </div>
-            </div>
-          </div>
-
-          {error ? (
-            <div className="rounded-[1.5rem] border border-rose-200 bg-rose-50 px-4 py-3 text-sm text-rose-700">
-              {error}
-            </div>
-          ) : null}
-
-          {loadingProjects ? (
-            <div className="glass-panel rounded-[2rem] p-8 text-sm text-[var(--color-ink-soft)]">
-              {copy.loadingProjects}
-            </div>
-          ) : filteredProjects.length ? (
-            <div className="space-y-8">
-              {renderSection(copy.favoritesSection, favoriteProjects)}
-              {renderSection(copy.recentSection, recentProjects)}
-              {renderSection(copy.allSection, filteredProjects)}
-            </div>
           ) : (
-            <div className="glass-panel rounded-[2rem] p-8">
-              <p className="display-text text-3xl">{copy.emptyTitle}</p>
-              <p className="mt-3 max-w-lg text-sm leading-6 text-[var(--color-ink-soft)]">
-                {copy.emptyDescription}
+            <div className="mt-8 rounded-[1.8rem] border border-dashed border-[var(--color-line)] bg-white/55 px-5 py-5 sm:px-6">
+              <p className="text-sm font-semibold text-[var(--color-ink)]">{copy.welcomeTitle}</p>
+              <p className="mt-2 max-w-2xl text-sm leading-6 text-[var(--color-ink-soft)]">
+                {copy.welcomeDescription}
               </p>
             </div>
           )}
-
-          {showArchived ? (
-            <section className="glass-panel rounded-[2rem] p-5 sm:p-6">
-              <div className="mb-4 flex items-center justify-between gap-3">
-                <h2 className="text-xl font-semibold">{copy.archivedSection}</h2>
-                <span className="rounded-full bg-white/75 px-3 py-1 text-xs font-semibold text-[var(--color-ink-soft)]">
-                  {archivedProjects.length}
-                </span>
-              </div>
-              {archivedProjects.length ? (
-                <div className="grid gap-4 xl:grid-cols-2">
-                  {archivedProjects.map((item) => renderProjectCard(item, true))}
-                </div>
-              ) : (
-                <p className="rounded-[1.5rem] border border-dashed border-[var(--color-line)] p-5 text-sm text-[var(--color-ink-soft)]">
-                  {copy.emptyArchived}
-                </p>
-              )}
-            </section>
-          ) : null}
         </div>
 
-        <aside className={cn("project-editor-panel", showMobileEditor ? "block" : "hidden lg:block")}>
-          <div className="glass-panel rounded-[2.2rem] p-5 sm:p-6 lg:sticky lg:top-6">
-            <ProjectForm
-              mode={formMode}
-              values={formValues}
-              busy={submitting}
-              showCancel={formMode === "edit" || showMobileEditor}
-              dictionary={copy}
-              onChange={(field, value) =>
-                setFormValues((current) => ({
-                  ...current,
-                  [field]: value,
-                }))
-              }
-              onSubmit={handleSubmit}
-              onCancel={() => {
-                resetForm();
-                setShowMobileEditor(false);
-              }}
-            />
+        <div
+          className={cn(
+            "grid transition-all duration-300 ease-out",
+            showEditor ? "grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0",
+          )}
+        >
+          <div className="overflow-hidden">
+            {showEditor ? (
+              <section id="project-editor-panel" className="glass-panel rounded-[2.2rem] p-5 sm:p-6">
+                <ProjectForm
+                  mode={formMode}
+                  values={formValues}
+                  busy={submitting}
+                  showCancel={showEditor}
+                  dictionary={copy}
+                  onChange={(field, value) =>
+                    setFormValues((current) => ({
+                      ...current,
+                      [field]: value,
+                    }))
+                  }
+                  onSubmit={handleSubmit}
+                  onCancel={closeEditor}
+                />
+              </section>
+            ) : null}
           </div>
-        </aside>
+        </div>
+
+        <div className="glass-panel rounded-[2.2rem] p-5 sm:p-6">
+          <div className="flex flex-col gap-4 xl:flex-row xl:items-center xl:justify-between">
+            <div className="flex flex-1 items-center gap-3 rounded-[1.4rem] border border-[var(--color-line)] bg-white/75 px-4 py-3">
+              <Search className="h-4 w-4 text-[var(--color-ink-soft)]" />
+              <Input
+                className="border-0 bg-transparent p-0"
+                placeholder={copy.searchPlaceholder}
+                value={search}
+                onChange={(event) => setSearch(event.target.value)}
+              />
+            </div>
+
+            <div className="flex flex-wrap gap-3">
+              <button
+                type="button"
+                aria-pressed={visibilityMode === "all"}
+                className={filterPillClass(visibilityMode === "all")}
+                onClick={() => setVisibilityMode("all")}
+              >
+                {copy.allFilter}
+              </button>
+              <button
+                type="button"
+                aria-pressed={visibilityMode === "favorites"}
+                className={filterPillClass(visibilityMode === "favorites")}
+                onClick={() => setVisibilityMode("favorites")}
+              >
+                {copy.favoriteFilter}
+              </button>
+
+              <label className={cn(filterPillClass(), "cursor-pointer pr-3")}>
+                <span>{copy.sortLabel}</span>
+                <select
+                  className="cursor-pointer bg-transparent text-sm text-[var(--color-ink)] outline-none"
+                  value={sortMode}
+                  onChange={(event) => setSortMode(event.target.value as SortMode)}
+                >
+                  <option value="updated">{copy.sortUpdated}</option>
+                  <option value="name">{copy.sortName}</option>
+                  <option value="subject">{copy.sortSubject}</option>
+                </select>
+              </label>
+
+              <button
+                type="button"
+                aria-pressed={showArchived}
+                className={filterPillClass(showArchived)}
+                onClick={() => setShowArchived((current) => !current)}
+              >
+                <Archive className="mr-2 h-4 w-4" />
+                {showArchived ? copy.archivedClose : copy.archivedToggle}
+              </button>
+            </div>
+          </div>
+        </div>
+
+        {error ? (
+          <div className="rounded-[1.5rem] border border-rose-200 bg-rose-50 px-4 py-3 text-sm text-rose-700">
+            {error}
+          </div>
+        ) : null}
+
+        {loadingProjects ? (
+          <div className="glass-panel rounded-[2rem] p-8 text-sm text-[var(--color-ink-soft)]">
+            {copy.loadingProjects}
+          </div>
+        ) : filteredProjects.length ? (
+          <div className="space-y-8">
+            {renderSection(copy.favoritesSection, favoriteProjects)}
+            {renderSection(copy.recentSection, recentProjects)}
+            {renderSection(copy.allSection, filteredProjects)}
+          </div>
+        ) : hasAnyActiveProjects ? (
+          <div className="glass-panel rounded-[2rem] p-8">
+            <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
+              <div>
+                <h2 className="text-3xl">{copy.emptyTitle}</h2>
+                <p className="mt-3 max-w-lg text-sm leading-6 text-[var(--color-ink-soft)]">
+                  {copy.emptyDescription}
+                </p>
+              </div>
+              {hasActiveFilters ? (
+                <Button
+                  type="button"
+                  variant="secondary"
+                  onClick={() => {
+                    setSearch("");
+                    setVisibilityMode("all");
+                  }}
+                >
+                  {copy.clearFilters}
+                </Button>
+              ) : null}
+            </div>
+          </div>
+        ) : hasOnlyArchivedProjects ? (
+          <div className="glass-panel rounded-[2rem] p-8">
+            <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
+              <div>
+                <h2 className="text-3xl">{copy.emptyTitle}</h2>
+                <p className="mt-3 max-w-lg text-sm leading-6 text-[var(--color-ink-soft)]">
+                  {copy.emptyArchived}
+                </p>
+              </div>
+              {!showArchived ? (
+                <Button type="button" variant="secondary" onClick={() => setShowArchived(true)}>
+                  <Archive className="mr-2 h-4 w-4" />
+                  {copy.archivedToggle}
+                </Button>
+              ) : null}
+            </div>
+          </div>
+        ) : (
+          <div className="glass-panel rounded-[2rem] p-6 sm:p-8">
+            <div className="flex flex-col gap-8 lg:flex-row lg:items-center lg:justify-between">
+              <div className="relative flex h-52 overflow-hidden rounded-[2rem] border border-dashed border-[var(--color-line)] bg-white/65 lg:w-[18.5rem]">
+                <div className="absolute left-6 top-6 h-20 w-20 rounded-full bg-[var(--color-accent-soft)]" />
+                <div className="absolute bottom-6 right-8 h-24 w-24 rounded-full bg-[rgba(239,131,84,0.16)]" />
+                <div className="relative m-auto flex h-24 w-24 items-center justify-center rounded-[2rem] bg-white shadow-[var(--shadow-soft)]">
+                  <FolderOpen className="h-10 w-10 text-[var(--color-accent-strong)]" />
+                </div>
+                <div className="absolute bottom-8 right-10 flex h-11 w-11 items-center justify-center rounded-full bg-[var(--color-ink)] text-white shadow-[var(--shadow-soft)]">
+                  <Plus className="h-5 w-5" />
+                </div>
+              </div>
+
+              <div className="max-w-2xl">
+                <h2 className="text-3xl">{copy.emptyFirstTitle}</h2>
+                <p className="mt-3 text-sm leading-7 text-[var(--color-ink-soft)]">
+                  {copy.emptyFirstDescription}
+                </p>
+                <div className="mt-5 flex flex-wrap items-center gap-3">
+                  <Button
+                    type="button"
+                    onClick={() =>
+                      openCreateEditor({
+                        ...EMPTY_FORM,
+                        subject: copy.emptySuggestedSubject,
+                      })
+                    }
+                  >
+                    <Plus className="mr-2 h-4 w-4" />
+                    {copy.emptyFirstCta}
+                  </Button>
+                  <span className="caps-label rounded-full border border-[var(--color-line)] bg-white/70 px-4 py-2 text-xs font-semibold text-[var(--color-ink-soft)]">
+                    {copy.createHint}
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {showArchived ? (
+          <section className="glass-panel rounded-[2rem] p-5 sm:p-6">
+            <div className="mb-4 flex items-center justify-between gap-3">
+              <h2 className="text-xl font-semibold">{copy.archivedSection}</h2>
+              <span className="rounded-full bg-white/75 px-3 py-1 text-xs font-semibold text-[var(--color-ink-soft)]">
+                {archivedProjects.length}
+              </span>
+            </div>
+            {archivedProjects.length ? (
+              <div className="grid gap-4 xl:grid-cols-2">
+                {archivedProjects.map((item) => renderProjectCard(item, true))}
+              </div>
+            ) : (
+              <p className="rounded-[1.5rem] border border-dashed border-[var(--color-line)] p-5 text-sm text-[var(--color-ink-soft)]">
+                {copy.emptyArchived}
+              </p>
+            )}
+          </section>
+        ) : null}
       </section>
     </main>
   );

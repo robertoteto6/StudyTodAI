@@ -5,7 +5,7 @@ StudyTodAI is a `Next.js` academic workspace built around project-based document
 ## Release line
 
 - `v1.0.0`: baseline version currently published on GitHub.
-- `v1.1.0`: current local release candidate with the new dashboard, project management, and localization improvements documented in [`CHANGELOG.md`](./CHANGELOG.md).
+- `v1.1.1`: current local release candidate with a cleaner project hub, better first-project onboarding, and accessibility polish documented in [`CHANGELOG.md`](./CHANGELOG.md).
 
 ## Stack
 

@@ -514,7 +514,7 @@ export function WorkspaceShell({
             <ArrowLeft className="h-4 w-4" />
             {copy.back}
           </Link>
-          <h1 className="display-text mt-2 text-4xl">
+          <h1 className="mt-2 text-4xl">
             {loadingProject ? "..." : project?.name ?? copy.projectFallbackTitle}
           </h1>
           {project?.description ? (
@@ -705,7 +705,7 @@ export function WorkspaceShell({
           </div>
 
           <div className="mt-4 rounded-[1.5rem] border border-[var(--color-line)] bg-white/70 p-3">
-            <p className="text-xs uppercase tracking-[0.25em] text-[var(--color-ink-soft)]">
+            <p className="caps-label text-xs text-[var(--color-ink-soft)]">
               {copy.scopeLabel}
             </p>
             <div className="mt-3 flex flex-wrap gap-2">
@@ -746,13 +746,13 @@ export function WorkspaceShell({
                     entry.role === "assistant" ? "bg-white/75" : "bg-[var(--color-surface-dark)] text-white"
                   }`}
                 >
-                  <p className="text-xs uppercase tracking-[0.25em] opacity-60">
+                  <p className="caps-label text-xs opacity-60">
                     {entry.role === "assistant" ? copy.roleAssistant : copy.roleUser}
                   </p>
                   <p className="mt-2 whitespace-pre-wrap text-sm leading-6">{entry.content}</p>
                   {entry.citations.length ? (
                     <div className="mt-4 space-y-2">
-                      <p className="text-xs font-semibold uppercase tracking-[0.25em] opacity-60">
+                      <p className="caps-label text-xs font-semibold opacity-60">
                         {copy.citations}
                       </p>
                       {entry.citations.map((citation) => (

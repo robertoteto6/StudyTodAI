@@ -7,16 +7,19 @@
   --color-surface-dark: #10212b;
   --color-line: rgba(16, 33, 43, 0.12);
   --color-ink: #10212b;
-  --color-ink-soft: rgba(16, 33, 43, 0.68);
+  --color-ink-soft: rgba(16, 33, 43, 0.72);
   --color-accent: #0f766e;
   --color-accent-strong: #115e59;
   --color-accent-soft: rgba(15, 118, 110, 0.14);
+  --color-focus-ring: #0f766e;
+  --color-focus-ring-soft: rgba(15, 118, 110, 0.22);
   --color-warm: #ef8354;
   --color-warning: #9a3412;
   --shadow-panel: 0 18px 50px rgba(16, 33, 43, 0.08);
   --shadow-soft: 0 12px 30px rgba(16, 33, 43, 0.06);
   --color-success-soft: rgba(22, 163, 74, 0.12);
   --color-warning-soft: rgba(245, 158, 11, 0.14);
+  --tracking-caps: 0.28em;
 }
 
 @theme inline {
@@ -53,6 +56,12 @@ select {
   font: inherit;
 }
 
+:where(a[href], button, input:not([type="hidden"]), textarea, select, summary, [role="button"], [tabindex]:not([tabindex="-1"])):focus-visible {
+  outline: 3px solid var(--color-focus-ring);
+  outline-offset: 3px;
+  box-shadow: 0 0 0 6px var(--color-focus-ring-soft);
+}
+
 ::selection {
   background: rgba(15, 118, 110, 0.18);
 }
@@ -64,8 +73,14 @@ select {
   box-shadow: var(--shadow-panel);
 }
 
-.display-text {
+h1,
+h2 {
   font-family: var(--font-display), serif;
+}
+
+.caps-label {
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-caps);
 }
 
 .workspace-grid {
@@ -103,7 +118,7 @@ select {
 .project-summary-label {
   font-size: 0.8rem;
   text-transform: uppercase;
-  letter-spacing: 0.22em;
+  letter-spacing: var(--tracking-caps);
   color: var(--color-ink-soft);
 }
 
@@ -124,7 +139,7 @@ select {
 .project-metric-label {
   font-size: 0.7rem;
   text-transform: uppercase;
-  letter-spacing: 0.18em;
+  letter-spacing: var(--tracking-caps);
   color: var(--color-ink-soft);
 }
 

@@ -18,7 +18,7 @@ export function LocaleSwitcher({ locale }: { locale: Locale }) {
             key={value}
             href={nextPath}
             aria-current={active ? "page" : undefined}
-            className={`min-w-11 rounded-full px-3 py-1.5 text-center text-xs font-semibold tracking-[0.16em] transition-colors ${
+            className={`caps-label min-w-11 rounded-full px-3 py-1.5 text-center text-xs font-semibold transition-colors ${
               active
                 ? "bg-[var(--color-accent)] text-white shadow-sm"
                 : "text-[var(--color-ink-soft)] hover:bg-white hover:text-[var(--color-ink)]"

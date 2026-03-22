@@ -40,7 +40,7 @@ export function AppHeader({
           <Sparkles className="h-5 w-5" />
         </span>
         <div>
-          <p className="display-text text-xl leading-none">StudyTodAI</p>
+          <p className="text-xl leading-none">StudyTodAI</p>
           <p className="text-xs text-[var(--color-ink-soft)]">{dictionary.nav.tagline}</p>
         </div>
       </Link>

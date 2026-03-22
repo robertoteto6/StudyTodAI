@@ -2,6 +2,28 @@
 
 All notable product-facing changes for StudyTodAI are tracked here.
 
+## [1.1.1] - 2026-03-22
+
+Refinement release focused on making the project hub clearer to navigate, easier to start from zero, and more accessible across the app.
+
+### Added
+
+- First-project onboarding copy with a suggested starter project flow when the dashboard is still empty.
+- Inline success feedback after creating a project, so users get immediate confirmation without leaving the hub.
+- Expanded ES/EN copy for welcome states, filtered-empty states, and guided project creation prompts.
+
+### Changed
+
+- The dashboard layout now prioritizes one clear create-project action, compact summary cards, and filter pills that are easier to scan and use.
+- Project editing now opens in a dedicated panel instead of relying on the previous mobile-only editor behavior.
+- The landing, login, workspace, and project switcher surfaces now share more consistent typography and visual labels.
+
+### Fixed
+
+- Keyboard focus is now much easier to see across links, buttons, inputs, and selectors.
+- Busy states during project saves now provide clearer feedback, including a loading spinner on the submit action.
+- Decorative icons and heading markup were adjusted to improve accessibility on key public and workspace views.
+
 ## [1.1.0] - 2026-03-22
 
 Local release target that structures the changes made after the `v1.0.0` GitHub baseline.

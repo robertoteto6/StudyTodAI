@@ -70,10 +70,10 @@ export function AuthCard({ locale, dictionary }: AuthCardProps) {
   return (
     <section className="glass-panel w-full max-w-md rounded-[2rem] p-6 sm:p-8">
       <div className="space-y-3">
-        <p className="text-xs uppercase tracking-[0.3em] text-[var(--color-ink-soft)]">
+        <p className="caps-label text-xs text-[var(--color-ink-soft)]">
           {authMode === "firebase" ? copy.modeFirebase : copy.modeDemo}
         </p>
-        <h1 className="display-text text-4xl">{copy.title}</h1>
+        <h1 className="text-4xl">{copy.title}</h1>
         <p className="text-sm leading-6 text-[var(--color-ink-soft)]">{copy.subtitle}</p>
       </div>
 

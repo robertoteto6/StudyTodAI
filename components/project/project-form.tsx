@@ -1,6 +1,6 @@
 "use client";
 
-import { Palette } from "lucide-react";
+import { LoaderCircle, Palette } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input, Textarea } from "@/components/ui/input";
 import { PROJECT_ACCENT_COLORS } from "@/lib/constants";
@@ -48,7 +48,7 @@ export function ProjectForm({
   return (
     <form className="space-y-4" onSubmit={onSubmit}>
       <div className="space-y-2">
-        <p className="text-xs uppercase tracking-[0.28em] text-[var(--color-ink-soft)]">
+        <p className="caps-label text-xs text-[var(--color-ink-soft)]">
           {mode === "create" ? dictionary.createModeTitle : dictionary.editModeTitle}
         </p>
         <p className="text-sm leading-6 text-[var(--color-ink-soft)]">
@@ -98,7 +98,8 @@ export function ProjectForm({
       </div>
 
       <div className="flex flex-wrap gap-3">
-        <Button disabled={busy || !values.name.trim()} type="submit">
+        <Button aria-busy={busy} disabled={busy || !values.name.trim()} type="submit">
+          {busy ? <LoaderCircle className="mr-2 h-4 w-4 animate-spin" /> : null}
           {mode === "create" ? dictionary.createCta : dictionary.saveChanges}
         </Button>
         {showCancel && onCancel ? (

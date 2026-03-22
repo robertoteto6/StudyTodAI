@@ -45,6 +45,8 @@ export type AppDictionary = {
     eyebrow: string;
     title: string;
     description: string;
+    welcomeTitle: string;
+    welcomeDescription: string;
     createModeTitle: string;
     editModeTitle: string;
     createHint: string;
@@ -54,6 +56,7 @@ export type AppDictionary = {
     subject: string;
     accentColor: string;
     createCta: string;
+    createSuccess: string;
     saveChanges: string;
     cancelEdit: string;
     searchPlaceholder: string;
@@ -89,6 +92,11 @@ export type AppDictionary = {
     loadingProjects: string;
     emptyTitle: string;
     emptyDescription: string;
+    emptyFirstTitle: string;
+    emptyFirstDescription: string;
+    emptyFirstCta: string;
+    emptySuggestedSubject: string;
+    clearFilters: string;
     emptyArchived: string;
   };
   workspace: {
@@ -235,6 +243,9 @@ const dictionaries: Record<Locale, AppDictionary> = {
       title: "Gestiona proyectos, prioridades y contexto desde un solo hub.",
       description:
         "Organiza por asignatura o examen, fija lo importante, archiva lo cerrado y entra al workspace correcto sin perder tiempo.",
+      welcomeTitle: "Tu hub de estudio está listo para arrancar",
+      welcomeDescription:
+        "Cuando crees tu primer proyecto, aquí verás actividad, favoritos y accesos rápidos sin ruido innecesario.",
       createModeTitle: "Nuevo proyecto",
       editModeTitle: "Editar proyecto",
       createHint: "Crea un espacio nuevo y aparecerá al instante en recientes.",
@@ -244,6 +255,7 @@ const dictionaries: Record<Locale, AppDictionary> = {
       subject: "Asignatura",
       accentColor: "Color de acento",
       createCta: "Crear proyecto",
+      createSuccess: "Proyecto creado correctamente.",
       saveChanges: "Guardar cambios",
       cancelEdit: "Cancelar",
       searchPlaceholder: "Buscar por nombre, materia o descripción",
@@ -277,8 +289,14 @@ const dictionaries: Record<Locale, AppDictionary> = {
       documentsProcessing: "Procesando",
       noDescription: "Añade una breve descripción para diferenciar mejor este proyecto.",
       loadingProjects: "Cargando proyectos...",
-      emptyTitle: "No hay proyectos para esta vista",
-      emptyDescription: "Crea un proyecto o ajusta la búsqueda para recuperar tu hub de estudio.",
+      emptyTitle: "No aparece ningún proyecto con este filtro",
+      emptyDescription: "Prueba con otra búsqueda o vuelve a la vista completa para recuperar tu hub.",
+      emptyFirstTitle: "Convierte esta pantalla en tu centro de estudio",
+      emptyFirstDescription:
+        "Crea un primer proyecto para reunir apuntes, prácticas y exámenes de una asignatura en el mismo espacio.",
+      emptyFirstCta: "Crea tu primer proyecto de Cálculo",
+      emptySuggestedSubject: "Cálculo",
+      clearFilters: "Mostrar todos",
       emptyArchived: "No hay proyectos archivados ahora mismo.",
     },
     workspace: {
@@ -423,6 +441,9 @@ const dictionaries: Record<Locale, AppDictionary> = {
       title: "Manage projects, priorities, and context from one hub.",
       description:
         "Organize by subject or exam, pin what matters, archive what is done, and jump into the right workspace faster.",
+      welcomeTitle: "Your study hub is ready to start",
+      welcomeDescription:
+        "Once you create your first project, this area will show activity, favorites, and quick access without the extra noise.",
       createModeTitle: "New project",
       editModeTitle: "Edit project",
       createHint: "Create a new study space and it will appear in recents immediately.",
@@ -432,6 +453,7 @@ const dictionaries: Record<Locale, AppDictionary> = {
       subject: "Subject",
       accentColor: "Accent color",
       createCta: "Create project",
+      createSuccess: "Project created successfully.",
       saveChanges: "Save changes",
       cancelEdit: "Cancel",
       searchPlaceholder: "Search by name, subject, or description",
@@ -465,8 +487,14 @@ const dictionaries: Record<Locale, AppDictionary> = {
       documentsProcessing: "Processing",
       noDescription: "Add a short description to make this project easier to scan.",
       loadingProjects: "Loading projects...",
-      emptyTitle: "No projects match this view",
-      emptyDescription: "Create a project or adjust your search to rebuild your study hub.",
+      emptyTitle: "No projects match this view right now",
+      emptyDescription: "Try a different search or switch back to the full view to recover your hub.",
+      emptyFirstTitle: "Turn this screen into your study command center",
+      emptyFirstDescription:
+        "Create your first project to keep notes, practice sets, and exam prep for one subject in the same space.",
+      emptyFirstCta: "Create your first Calculus project",
+      emptySuggestedSubject: "Calculus",
+      clearFilters: "Show all",
       emptyArchived: "There are no archived projects right now.",
     },
     workspace: {
