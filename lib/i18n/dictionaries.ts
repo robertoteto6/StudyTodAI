@@ -78,6 +78,8 @@ export type AppDictionary = {
     descriptionField: string;
     subject: string;
     accentColor: string;
+    projectIcon: string;
+    colorPalette: string;
     createCta: string;
     createSuccess: string;
     saveChanges: string;
@@ -118,7 +120,6 @@ export type AppDictionary = {
     emptyFirstTitle: string;
     emptyFirstDescription: string;
     emptyFirstCta: string;
-    emptySuggestedSubject: string;
     clearFilters: string;
     emptyArchived: string;
   };
@@ -164,6 +165,8 @@ export type AppDictionary = {
     descriptionField: string;
     subject: string;
     accentColor: string;
+    projectIcon: string;
+    colorPalette: string;
     createCta: string;
     saveChanges: string;
     cancelEdit: string;
@@ -333,12 +336,14 @@ const dictionaries: Record<Locale, AppDictionary> = {
         "Cuando crees tu primer proyecto, aquí verás actividad, favoritos y accesos rápidos sin ruido innecesario.",
       createModeTitle: "Nuevo proyecto",
       editModeTitle: "Editar proyecto",
-      createHint: "Crea un espacio nuevo y aparecerá al instante en recientes.",
-      editHint: "Actualiza el nombre, materia, descripción o color del proyecto actual.",
+      createHint: "Crea un espacio nuevo, define su estilo y aparecerá al instante en recientes.",
+      editHint: "Actualiza el nombre, la asignatura, la descripción o el estilo visual del proyecto actual.",
       name: "Nombre del proyecto",
       descriptionField: "Descripción",
       subject: "Asignatura",
-      accentColor: "Color de acento",
+      accentColor: "Estilo visual",
+      projectIcon: "Símbolo",
+      colorPalette: "Paleta",
       createCta: "Crear proyecto",
       createSuccess: "Proyecto creado correctamente.",
       saveChanges: "Guardar cambios",
@@ -378,9 +383,8 @@ const dictionaries: Record<Locale, AppDictionary> = {
       emptyDescription: "Prueba con otra búsqueda o vuelve a la vista completa para recuperar tu hub.",
       emptyFirstTitle: "Convierte esta pantalla en tu centro de estudio",
       emptyFirstDescription:
-        "Crea un primer proyecto para reunir apuntes, prácticas y exámenes de una asignatura en el mismo espacio.",
-      emptyFirstCta: "Crea tu primer proyecto de Cálculo",
-      emptySuggestedSubject: "Cálculo",
+        "Crea un primer proyecto para reunir apuntes, prácticas y exámenes en el mismo espacio.",
+      emptyFirstCta: "Crea tu primer proyecto",
       clearFilters: "Mostrar todos",
       emptyArchived: "No hay proyectos archivados ahora mismo.",
     },
@@ -421,12 +425,14 @@ const dictionaries: Record<Locale, AppDictionary> = {
       noSubject: "Sin asignatura",
       createModeTitle: "Nuevo proyecto",
       editModeTitle: "Editar proyecto",
-      createHint: "Crea un espacio nuevo y aparecerá al instante en recientes.",
-      editHint: "Ajusta el nombre, la materia, la descripción o el color sin salir del workspace.",
+      createHint: "Crea un espacio nuevo, define su estilo y aparecerá al instante en recientes.",
+      editHint: "Ajusta el nombre, la asignatura, la descripción o el estilo visual sin salir del workspace.",
       name: "Nombre del proyecto",
       descriptionField: "Descripción",
       subject: "Asignatura",
-      accentColor: "Color de acento",
+      accentColor: "Estilo visual",
+      projectIcon: "Símbolo",
+      colorPalette: "Paleta",
       createCta: "Crear proyecto",
       saveChanges: "Guardar cambios",
       cancelEdit: "Cancelar",
@@ -593,12 +599,14 @@ const dictionaries: Record<Locale, AppDictionary> = {
         "Once you create your first project, this area will show activity, favorites, and quick access without the extra noise.",
       createModeTitle: "New project",
       editModeTitle: "Edit project",
-      createHint: "Create a new study space and it will appear in recents immediately.",
-      editHint: "Update the name, subject, description, or color of the current project.",
+      createHint: "Create a new study space, set its look, and it will appear in recents immediately.",
+      editHint: "Update the name, subject, description, or visual style of the current project.",
       name: "Project name",
       descriptionField: "Description",
       subject: "Subject",
-      accentColor: "Accent color",
+      accentColor: "Visual style",
+      projectIcon: "Symbol",
+      colorPalette: "Palette",
       createCta: "Create project",
       createSuccess: "Project created successfully.",
       saveChanges: "Save changes",
@@ -638,9 +646,8 @@ const dictionaries: Record<Locale, AppDictionary> = {
       emptyDescription: "Try a different search or switch back to the full view to recover your hub.",
       emptyFirstTitle: "Turn this screen into your study command center",
       emptyFirstDescription:
-        "Create your first project to keep notes, practice sets, and exam prep for one subject in the same space.",
-      emptyFirstCta: "Create your first Calculus project",
-      emptySuggestedSubject: "Calculus",
+        "Create your first project to keep notes, practice sets, and exam prep in the same space.",
+      emptyFirstCta: "Create your first project",
       clearFilters: "Show all",
       emptyArchived: "There are no archived projects right now.",
     },
@@ -681,12 +688,14 @@ const dictionaries: Record<Locale, AppDictionary> = {
       noSubject: "No subject",
       createModeTitle: "New project",
       editModeTitle: "Edit project",
-      createHint: "Create a new study space and it will appear in recents immediately.",
-      editHint: "Adjust the name, subject, description, or color without leaving the workspace.",
+      createHint: "Create a new study space, set its look, and it will appear in recents immediately.",
+      editHint: "Adjust the name, subject, description, or visual style without leaving the workspace.",
       name: "Project name",
       descriptionField: "Description",
       subject: "Subject",
-      accentColor: "Accent color",
+      accentColor: "Visual style",
+      projectIcon: "Symbol",
+      colorPalette: "Palette",
       createCta: "Create project",
       saveChanges: "Save changes",
       cancelEdit: "Cancel",
