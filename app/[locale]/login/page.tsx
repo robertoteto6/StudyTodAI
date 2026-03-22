@@ -21,7 +21,7 @@ export default async function LoginPage({
 
   return (
     <main className="mx-auto flex min-h-[calc(100vh-120px)] max-w-7xl items-center justify-center px-4 py-8 sm:px-6">
-      <AuthCard locale={locale} dictionary={dictionary.auth} />
+      <AuthCard locale={locale} dictionary={dictionary} />
     </main>
   );
 }

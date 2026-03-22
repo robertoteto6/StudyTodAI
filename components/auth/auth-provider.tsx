@@ -67,7 +67,7 @@ function toAuthUser(nextUser: User): AuthUser {
   return {
     id: nextUser.uid,
     email: nextUser.email ?? "unknown@example.com",
-    name: nextUser.displayName ?? nextUser.email?.split("@")[0] ?? "Student",
+    name: nextUser.displayName ?? nextUser.email?.split("@")[0] ?? "StudyTodAI",
     avatarUrl: nextUser.photoURL,
     provider: "firebase",
   };
@@ -242,7 +242,7 @@ export function AuthProvider({
         const demoUser: AuthUser = {
           id: nanoid(),
           email: "demo@studytodai.local",
-          name: "Demo Student",
+          name: "StudyTodAI Demo",
           provider: "demo",
         };
         writeDemoUser(demoUser);

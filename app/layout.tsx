@@ -29,7 +29,7 @@ export default function RootLayout({
 
   return (
     <html
-      lang="en"
+      lang="und"
       className={`${sans.variable} ${display.variable} h-full antialiased`}
     >
       <body className="min-h-full bg-[var(--color-canvas)] text-[var(--color-ink)]">

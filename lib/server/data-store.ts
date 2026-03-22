@@ -12,6 +12,8 @@ import {
   type DocumentRecord,
   type ProcessingJob,
   type Project,
+  type ProjectListItem,
+  type ProjectStatusFilter,
   type ProjectInput,
 } from "@/lib/types";
 
@@ -58,6 +60,66 @@ async function writeDemoDatabase(data: DemoDatabase) {
   await fs.writeFile(databasePath, JSON.stringify(data, null, 2), "utf8");
 }
 
+function normalizeProject(project: Project): Project {
+  return {
+    ...project,
+    isFavorite: project.isFavorite ?? false,
+    archivedAt: project.archivedAt ?? null,
+  };
+}
+
+function filterProjectsByStatus(projects: Project[], status: ProjectStatusFilter) {
+  if (status === "all") {
+    return projects;
+  }
+
+  return projects.filter((project) =>
+    status === "archived" ? Boolean(project.archivedAt) : !project.archivedAt,
+  );
+}
+
+function sortProjects(projects: Project[]) {
+  return [...projects].sort((left, right) => right.updatedAt.localeCompare(left.updatedAt));
+}
+
+function summarizeProjects(projects: Project[], documents: DocumentRecord[]): ProjectListItem[] {
+  const metrics = new Map<
+    string,
+    { documentCount: number; readyDocumentCount: number; processingDocumentCount: number }
+  >();
+
+  for (const document of documents) {
+    const current = metrics.get(document.projectId) ?? {
+      documentCount: 0,
+      readyDocumentCount: 0,
+      processingDocumentCount: 0,
+    };
+
+    current.documentCount += 1;
+    if (document.status === "ready") {
+      current.readyDocumentCount += 1;
+    }
+    if (document.status === "queued" || document.status === "processing") {
+      current.processingDocumentCount += 1;
+    }
+
+    metrics.set(document.projectId, current);
+  }
+
+  return projects.map((project) => {
+    const current = metrics.get(project.id) ?? {
+      documentCount: 0,
+      readyDocumentCount: 0,
+      processingDocumentCount: 0,
+    };
+
+    return {
+      project,
+      ...current,
+    };
+  });
+}
+
 export async function upsertUser(user: AuthUser) {
   const firestore = getAdminFirestore();
 
@@ -87,6 +149,8 @@ export async function createProject(user: AuthUser, input: ProjectInput) {
     description: input.description,
     subject: input.subject,
     accentColor: input.accentColor,
+    isFavorite: false,
+    archivedAt: null,
     createdAt: now,
     updatedAt: now,
   };
@@ -104,23 +168,76 @@ export async function createProject(user: AuthUser, input: ProjectInput) {
   return project;
 }
 
-export async function listProjects(userId: string) {
+export async function listProjects(
+  userId: string,
+  status: ProjectStatusFilter = "active",
+) {
   const firestore = getAdminFirestore();
 
   if (firestore) {
     const snapshot = await firestore
       .collection("projects")
       .where("userId", "==", userId)
-      .orderBy("updatedAt", "desc")
       .get();
 
-    return snapshot.docs.map((doc) => doc.data() as Project);
+    return sortProjects(
+      filterProjectsByStatus(
+        snapshot.docs.map((doc) => normalizeProject(doc.data() as Project)),
+        status,
+      ),
+    );
   }
 
   const db = await readDemoDatabase();
-  return db.projects
-    .filter((project) => project.userId === userId)
-    .sort((left, right) => right.updatedAt.localeCompare(left.updatedAt));
+  return sortProjects(
+    filterProjectsByStatus(
+      db.projects
+        .filter((project) => project.userId === userId)
+        .map((project) => normalizeProject(project)),
+      status,
+    ),
+  );
+}
+
+export async function listProjectListItems(
+  userId: string,
+  status: ProjectStatusFilter = "active",
+) {
+  const firestore = getAdminFirestore();
+
+  if (firestore) {
+    const [projectsSnapshot, documentsSnapshot] = await Promise.all([
+      firestore.collection("projects").where("userId", "==", userId).get(),
+      firestore.collection("documents").where("userId", "==", userId).get(),
+    ]);
+
+    const projects = sortProjects(
+      filterProjectsByStatus(
+        projectsSnapshot.docs.map((doc) => normalizeProject(doc.data() as Project)),
+        status,
+      ),
+    );
+
+    return summarizeProjects(
+      projects,
+      documentsSnapshot.docs.map((doc) => doc.data() as DocumentRecord),
+    );
+  }
+
+  const db = await readDemoDatabase();
+  const projects = sortProjects(
+    filterProjectsByStatus(
+      db.projects
+        .filter((project) => project.userId === userId)
+        .map((project) => normalizeProject(project)),
+      status,
+    ),
+  );
+
+  return summarizeProjects(
+    projects,
+    db.documents.filter((document) => document.userId === userId),
+  );
 }
 
 export async function getProjectById(projectId: string, userId: string) {
@@ -132,11 +249,12 @@ export async function getProjectById(projectId: string, userId: string) {
     if (!project || project.userId !== userId) {
       return null;
     }
-    return project;
+    return normalizeProject(project);
   }
 
   const db = await readDemoDatabase();
-  return db.projects.find((project) => project.id === projectId && project.userId === userId) ?? null;
+  const project = db.projects.find((item) => item.id === projectId && item.userId === userId);
+  return project ? normalizeProject(project) : null;
 }
 
 export async function touchProject(projectId: string, userId: string) {
@@ -154,6 +272,141 @@ export async function touchProject(projectId: string, userId: string) {
     project.updatedAt = updatedAt;
     await writeDemoDatabase(db);
   }
+}
+
+type ProjectPatch = Partial<
+  Pick<Project, "name" | "description" | "subject" | "accentColor" | "isFavorite" | "archivedAt">
+>;
+
+export async function updateProject(
+  projectId: string,
+  userId: string,
+  patch: ProjectPatch,
+) {
+  const firestore = getAdminFirestore();
+
+  if (firestore) {
+    const reference = firestore.collection("projects").doc(projectId);
+    const snapshot = await reference.get();
+    const project = snapshot.data() as Project | undefined;
+
+    if (!project || project.userId !== userId) {
+      return null;
+    }
+
+    const nextProject = normalizeProject({
+      ...project,
+      ...patch,
+      updatedAt: nowIso(),
+    });
+
+    await reference.set(nextProject, { merge: true });
+    return nextProject;
+  }
+
+  const db = await readDemoDatabase();
+  const index = db.projects.findIndex((item) => item.id === projectId && item.userId === userId);
+
+  if (index === -1) {
+    return null;
+  }
+
+  db.projects[index] = normalizeProject({
+    ...db.projects[index],
+    ...patch,
+    updatedAt: nowIso(),
+  });
+
+  await writeDemoDatabase(db);
+  return db.projects[index];
+}
+
+export async function archiveProject(projectId: string, userId: string) {
+  return updateProject(projectId, userId, {
+    archivedAt: nowIso(),
+    isFavorite: false,
+  });
+}
+
+export async function restoreProject(projectId: string, userId: string) {
+  return updateProject(projectId, userId, {
+    archivedAt: null,
+  });
+}
+
+export async function deleteProjectCascade(projectId: string, userId: string) {
+  const firestore = getAdminFirestore();
+
+  if (firestore) {
+    const project = await getProjectById(projectId, userId);
+
+    if (!project) {
+      return null;
+    }
+
+    const [documentsSnapshot, chatsSnapshot, messagesSnapshot, jobsSnapshot, chunksSnapshot] =
+      await Promise.all([
+        firestore.collection("documents").where("projectId", "==", projectId).where("userId", "==", userId).get(),
+        firestore.collection("chats").where("projectId", "==", projectId).where("userId", "==", userId).get(),
+        firestore.collection("messages").where("projectId", "==", projectId).where("userId", "==", userId).get(),
+        firestore.collection("processing_jobs").where("projectId", "==", projectId).where("userId", "==", userId).get(),
+        firestore.collection("document_chunks").where("projectId", "==", projectId).where("userId", "==", userId).get(),
+      ]);
+
+    const deleteTargets = [
+      firestore.collection("projects").doc(projectId),
+      ...documentsSnapshot.docs.map((doc) => doc.ref),
+      ...chatsSnapshot.docs.map((doc) => doc.ref),
+      ...messagesSnapshot.docs.map((doc) => doc.ref),
+      ...jobsSnapshot.docs.map((doc) => doc.ref),
+      ...chunksSnapshot.docs.map((doc) => doc.ref),
+    ];
+
+    for (let index = 0; index < deleteTargets.length; index += 450) {
+      const batch = firestore.batch();
+
+      deleteTargets.slice(index, index + 450).forEach((reference) => {
+        batch.delete(reference);
+      });
+
+      await batch.commit();
+    }
+
+    return project;
+  }
+
+  const db = await readDemoDatabase();
+  const project = db.projects.find((item) => item.id === projectId && item.userId === userId) ?? null;
+
+  if (!project) {
+    return null;
+  }
+
+  const chatIds = new Set(
+    db.chats
+      .filter((chat) => chat.projectId === projectId && chat.userId === userId)
+      .map((chat) => chat.id),
+  );
+
+  db.projects = db.projects.filter((item) => !(item.id === projectId && item.userId === userId));
+  db.documents = db.documents.filter(
+    (document) => !(document.projectId === projectId && document.userId === userId),
+  );
+  db.processing_jobs = db.processing_jobs.filter(
+    (job) => !(job.projectId === projectId && job.userId === userId),
+  );
+  db.document_chunks = db.document_chunks.filter(
+    (chunk) => !(chunk.projectId === projectId && chunk.userId === userId),
+  );
+  db.chats = db.chats.filter((chat) => !(chat.projectId === projectId && chat.userId === userId));
+  db.messages = db.messages.filter(
+    (message) =>
+      !(message.projectId === projectId && message.userId === userId) &&
+      !chatIds.has(message.chatId),
+  );
+  await writeDemoDatabase(db);
+
+  return project;
 }
 
 export async function createDocument(input: Omit<DocumentRecord, "id" | "createdAt" | "updatedAt">) {

@@ -35,6 +35,6 @@ export function parseDemoSessionToken(token: string): DemoSessionUser {
   return {
     id: id || "demo-user",
     email: email || "demo@studytodai.local",
-    name: name || "Demo Student",
+    name: name || "StudyTodAI Demo",
   };
 }

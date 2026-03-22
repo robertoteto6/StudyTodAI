@@ -18,7 +18,7 @@ function toAuthUserFromFirebase(decoded: {
   return {
     id: decoded.uid,
     email: decoded.email ?? "unknown@example.com",
-    name: decoded.name ?? decoded.email?.split("@")[0] ?? "Student",
+    name: decoded.name ?? decoded.email?.split("@")[0] ?? "StudyTodAI",
     avatarUrl: decoded.picture,
     provider: "firebase",
   };

@@ -19,5 +19,5 @@ export default async function ProjectWorkspacePage({
 
   const dictionary = getDictionary(locale);
 
-  return <WorkspaceShell locale={locale} projectId={projectId} dictionary={dictionary.workspace} />;
+  return <WorkspaceShell locale={locale} projectId={projectId} dictionary={dictionary} />;
 }

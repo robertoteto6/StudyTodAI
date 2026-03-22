@@ -1,5 +1,6 @@
 import { notFound } from "next/navigation";
 import { AppHeader } from "@/components/layout/app-header";
+import { DocumentLocaleSync } from "@/components/layout/document-locale-sync";
 import { getSafeLocale, isLocale } from "@/lib/i18n/config";
 import { getDictionary } from "@/lib/i18n/dictionaries";
 
@@ -25,12 +26,8 @@ export default async function LocaleLayout({
 
   return (
     <div className="min-h-screen">
-      <AppHeader
-        locale={locale}
-        dashboardLabel={dictionary.nav.dashboard}
-        loginLabel={dictionary.nav.login}
-        logoutLabel={dictionary.nav.logout}
-      />
+      <DocumentLocaleSync locale={locale} />
+      <AppHeader locale={locale} dictionary={dictionary} />
       {children}
     </div>
   );

@@ -11,5 +11,5 @@ export default async function LocaleHomePage({
   const locale = getSafeLocale(rawLocale);
   const dictionary = getDictionary(locale);
 
-  return <LandingShell locale={locale} dictionary={dictionary.landing} />;
+  return <LandingShell locale={locale} dictionary={dictionary} />;
 }

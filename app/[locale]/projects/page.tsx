@@ -19,5 +19,5 @@ export default async function ProjectsPage({
 
   const dictionary = getDictionary(locale);
 
-  return <DashboardShell locale={locale} dictionary={dictionary.dashboard} />;
+  return <DashboardShell locale={locale} dictionary={dictionary} />;
 }

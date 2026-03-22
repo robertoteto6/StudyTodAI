@@ -7,18 +7,15 @@ import { Sparkles } from "lucide-react";
 import { useAuth } from "@/components/auth/auth-provider";
 import { Button } from "@/components/ui/button";
 import { LocaleSwitcher } from "@/components/layout/locale-switcher";
+import { type AppDictionary } from "@/lib/i18n/dictionaries";
 import { type Locale } from "@/lib/types";
 
 export function AppHeader({
   locale,
-  dashboardLabel,
-  loginLabel,
-  logoutLabel,
+  dictionary,
 }: {
   locale: Locale;
-  dashboardLabel: string;
-  loginLabel: string;
-  logoutLabel: string;
+  dictionary: AppDictionary;
 }) {
   const router = useRouter();
   const { user, signOut } = useAuth();
@@ -44,14 +41,14 @@ export function AppHeader({
         </span>
         <div>
           <p className="display-text text-xl leading-none">StudyTodAI</p>
-          <p className="text-xs text-[var(--color-ink-soft)]">AI study workspace</p>
+          <p className="text-xs text-[var(--color-ink-soft)]">{dictionary.nav.tagline}</p>
         </div>
       </Link>
 
       <div className="flex items-center gap-3">
         <nav className="hidden items-center gap-2 rounded-full border border-[var(--color-line)] bg-white/65 px-2 py-1 sm:flex">
           <Link href={`/${locale}/projects`} className="rounded-full px-3 py-2 text-sm text-[var(--color-ink-soft)] hover:bg-white">
-            {dashboardLabel}
+            {dictionary.nav.dashboard}
           </Link>
           {user ? (
             <>
@@ -64,12 +61,12 @@ export function AppHeader({
                 disabled={busy}
                 onClick={handleSignOut}
               >
-                {logoutLabel}
+                {dictionary.nav.logout}
               </Button>
             </>
           ) : (
             <Link href={`/${locale}/login`} className="rounded-full px-3 py-2 text-sm text-[var(--color-ink-soft)] hover:bg-white">
-              {loginLabel}
+              {dictionary.nav.login}
             </Link>
           )}
         </nav>
@@ -80,14 +77,14 @@ export function AppHeader({
             disabled={busy}
             onClick={handleSignOut}
           >
-            {logoutLabel}
+            {dictionary.nav.logout}
           </Button>
         ) : (
           <Link
             href={`/${locale}/login`}
             className="rounded-full px-3 py-2 text-sm text-[var(--color-ink-soft)] hover:bg-white sm:hidden"
           >
-            {loginLabel}
+            {dictionary.nav.login}
           </Link>
         )}
         <LocaleSwitcher locale={locale} />

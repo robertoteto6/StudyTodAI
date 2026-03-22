@@ -1,9 +1,11 @@
 import { z } from "zod";
 import { NextResponse } from "next/server";
 import { PROJECT_ACCENT_COLORS } from "@/lib/constants";
-import { createProject, listProjects, upsertUser } from "@/lib/server/data-store";
+import { createProject, listProjectListItems, upsertUser } from "@/lib/server/data-store";
 import { requireRequestUser } from "@/lib/server/auth";
 import { jsonError } from "@/lib/server/http";
+
+const statusSchema = z.enum(["active", "archived", "all"]);
 
 const projectSchema = z.object({
   name: z.string().min(2).max(80),
@@ -18,7 +20,9 @@ export async function GET(request: Request) {
   try {
     const user = await requireRequestUser(request);
     await upsertUser(user);
-    const projects = await listProjects(user.id);
+    const { searchParams } = new URL(request.url);
+    const status = statusSchema.parse(searchParams.get("status") ?? "active");
+    const projects = await listProjectListItems(user.id, status);
     return NextResponse.json({ projects });
   } catch (error) {
     return jsonError(error instanceof Error ? error.message : "Unable to list projects", 401);

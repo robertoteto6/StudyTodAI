@@ -19,8 +19,19 @@ export type Project = {
   description: string;
   subject: string;
   accentColor: string;
+  isFavorite: boolean;
+  archivedAt: string | null;
   createdAt: string;
   updatedAt: string;
+};
+
+export type ProjectStatusFilter = "active" | "archived" | "all";
+
+export type ProjectListItem = {
+  project: Project;
+  documentCount: number;
+  readyDocumentCount: number;
+  processingDocumentCount: number;
 };
 
 export type DocumentStatus = "queued" | "processing" | "ready" | "error";

@@ -1,16 +1,195 @@
 import { type Locale } from "@/lib/types";
 
-const dictionaries = {
+export type AppDictionary = {
+  appName: string;
+  nav: {
+    dashboard: string;
+    workspace: string;
+    login: string;
+    logout: string;
+    tagline: string;
+  };
+  landing: {
+    eyebrow: string;
+    title: string;
+    description: string;
+    primaryCta: string;
+    secondaryCta: string;
+    bullets: readonly string[];
+    studioTitle: string;
+    studioChatTitle: string;
+    studioChatDescription: string;
+    studioProcessingTitle: string;
+    studioProcessingDescription: string;
+    workspaceTitle: string;
+    workspaceDescription: string;
+  };
+  auth: {
+    title: string;
+    subtitle: string;
+    email: string;
+    password: string;
+    name: string;
+    signIn: string;
+    signUp: string;
+    signInGoogle: string;
+    toggleToSignUp: string;
+    toggleToSignIn: string;
+    demoHint: string;
+    modeFirebase: string;
+    modeDemo: string;
+    statusLive: string;
+    statusDemo: string;
+  };
+  dashboard: {
+    eyebrow: string;
+    title: string;
+    description: string;
+    createModeTitle: string;
+    editModeTitle: string;
+    createHint: string;
+    editHint: string;
+    name: string;
+    descriptionField: string;
+    subject: string;
+    accentColor: string;
+    createCta: string;
+    saveChanges: string;
+    cancelEdit: string;
+    searchPlaceholder: string;
+    sortLabel: string;
+    sortUpdated: string;
+    sortName: string;
+    sortSubject: string;
+    allFilter: string;
+    favoriteFilter: string;
+    activeProjects: string;
+    favoritesCounter: string;
+    archivedCounter: string;
+    favoritesSection: string;
+    recentSection: string;
+    allSection: string;
+    archivedSection: string;
+    archivedToggle: string;
+    archivedClose: string;
+    openProject: string;
+    editProject: string;
+    favorite: string;
+    unfavorite: string;
+    archive: string;
+    restore: string;
+    delete: string;
+    deleteConfirm: string;
+    noSubject: string;
+    lastActivity: string;
+    documentsTotal: string;
+    documentsReady: string;
+    documentsProcessing: string;
+    noDescription: string;
+    loadingProjects: string;
+    emptyTitle: string;
+    emptyDescription: string;
+    emptyArchived: string;
+  };
+  workspace: {
+    back: string;
+    documents: string;
+    preview: string;
+    chat: string;
+    upload: string;
+    filterAll: string;
+    askPlaceholder: string;
+    send: string;
+    processing: string;
+    ready: string;
+    queued: string;
+    error: string;
+    noDocuments: string;
+    noPreview: string;
+    noMessages: string;
+    scopeLabel: string;
+    citations: string;
+    mobileDocs: string;
+    mobilePreview: string;
+    mobileChat: string;
+    processingHint: string;
+    unsupportedPreview: string;
+    switchProject: string;
+    favorites: string;
+    recent: string;
+    noProjects: string;
+    editProject: string;
+    documentsSearch: string;
+    includedInChat: string;
+    addToChatScope: string;
+    selectedDocs: string;
+    loadingPreview: string;
+    noSubject: string;
+    createModeTitle: string;
+    editModeTitle: string;
+    createHint: string;
+    editHint: string;
+    name: string;
+    descriptionField: string;
+    subject: string;
+    accentColor: string;
+    createCta: string;
+    saveChanges: string;
+    cancelEdit: string;
+    projectFallbackTitle: string;
+    roleUser: string;
+    roleAssistant: string;
+  };
+  common: {
+    loading: string;
+    search: string;
+    language: string;
+    demo: string;
+    firebase: string;
+    online: string;
+    offline: string;
+    notFoundTitle: string;
+    notFoundDescription: string;
+  };
+  errors: {
+    authenticationFailed: string;
+    unableToSyncSession: string;
+    unableToLoadProjects: string;
+    unableToSaveProject: string;
+    unableToUpdateProject: string;
+    unableToDeleteProject: string;
+    unableToLoadProject: string;
+    unableToLoadMessages: string;
+    unableToRefreshProject: string;
+    unableToLoadPreview: string;
+    unableToUploadDocuments: string;
+    unableToSendMessage: string;
+    projectNotFound: string;
+    documentNotFound: string;
+    archiveBeforeDelete: string;
+    unsupportedFileType: string;
+    missingFiles: string;
+    unableToCreateSession: string;
+    missingAuthorization: string;
+    unableToLoadAsset: string;
+    unableToGenerateAnswer: string;
+  };
+};
+
+export type DictionarySection<K extends keyof AppDictionary> = AppDictionary[K];
+
+const dictionaries: Record<Locale, AppDictionary> = {
   es: {
     appName: "StudyTodAI",
     nav: {
       dashboard: "Proyectos",
-      workspace: "Workspace",
+      workspace: "Espacio",
       login: "Acceder",
       logout: "Salir",
+      tagline: "Espacio de estudio con IA",
     },
     landing: {
-      eyebrow: "Workspace académico con IA",
+      eyebrow: "Espacio académico con IA",
       title: "Convierte tus apuntes en un proyecto vivo de estudio.",
       description:
         "Sube PDFs, presentaciones e imágenes de clase. Lee, conversa y recupera fragmentos clave desde un mismo espacio diseñado para estudiantes exigentes.",
@@ -21,6 +200,16 @@ const dictionaries = {
         "Vista previa central para mantener contexto visual.",
         "Procesado asíncrono preparado para OCR y conversiones.",
       ],
+      studioTitle: "Vista del estudio",
+      studioChatTitle: "Chat sobre documentos",
+      studioChatDescription:
+        "Pregunta por un tema de examen, una diapositiva o una demostración. El asistente mantiene las citas vinculadas.",
+      studioProcessingTitle: "Carril de procesado",
+      studioProcessingDescription:
+        "Los trabajos asíncronos mantienen la conversión de Office, el OCR y la indexación fuera de la ruta crítica de la experiencia.",
+      workspaceTitle: "Espacio de estudio de tres paneles",
+      workspaceDescription:
+        "Documentos a la izquierda, vista previa en el centro e IA a la derecha. En móvil se compacta en pestañas enfocadas.",
     },
     auth: {
       title: "Tu asistente académico te espera",
@@ -36,27 +225,65 @@ const dictionaries = {
       toggleToSignIn: "Ya tengo cuenta",
       demoHint:
         "Si no configuras Firebase, la app entra en modo demo persistente local.",
+      modeFirebase: "Auth Firebase",
+      modeDemo: "Demo local",
+      statusLive: "ACTIVO",
+      statusDemo: "DEMO",
     },
     dashboard: {
       eyebrow: "Tus espacios de estudio",
-      title: "Proyectos organizados por materia, curso o examen.",
+      title: "Gestiona proyectos, prioridades y contexto desde un solo hub.",
       description:
-        "Crea un proyecto por asignatura y deja que el asistente conecte chat, documentos y contexto.",
-      createTitle: "Nuevo proyecto",
+        "Organiza por asignatura o examen, fija lo importante, archiva lo cerrado y entra al workspace correcto sin perder tiempo.",
+      createModeTitle: "Nuevo proyecto",
+      editModeTitle: "Editar proyecto",
+      createHint: "Crea un espacio nuevo y aparecerá al instante en recientes.",
+      editHint: "Actualiza el nombre, materia, descripción o color del proyecto actual.",
       name: "Nombre del proyecto",
       descriptionField: "Descripción",
       subject: "Asignatura",
-      accentColor: "Color",
+      accentColor: "Color de acento",
       createCta: "Crear proyecto",
-      emptyTitle: "Todavía no hay proyectos",
-      emptyDescription: "Crea el primero para empezar a subir documentos y conversar con la IA.",
+      saveChanges: "Guardar cambios",
+      cancelEdit: "Cancelar",
+      searchPlaceholder: "Buscar por nombre, materia o descripción",
+      sortLabel: "Ordenar",
+      sortUpdated: "Actividad reciente",
+      sortName: "Nombre",
+      sortSubject: "Asignatura",
+      allFilter: "Todos",
+      favoriteFilter: "Solo favoritos",
+      activeProjects: "Activos",
+      favoritesCounter: "Favoritos",
+      archivedCounter: "Archivados",
+      favoritesSection: "Favoritos",
+      recentSection: "Recientes",
+      allSection: "Todos los proyectos",
+      archivedSection: "Archivados",
+      archivedToggle: "Ver archivados",
+      archivedClose: "Cerrar archivados",
       openProject: "Abrir proyecto",
-      documents: "documentos",
-      chatReady: "Chat listo",
+      editProject: "Editar",
+      favorite: "Fijar",
+      unfavorite: "Quitar favorito",
+      archive: "Archivar",
+      restore: "Restaurar",
+      delete: "Borrar",
+      deleteConfirm: "Este proyecto se borrará definitivamente. Esta acción no se puede deshacer.",
+      noSubject: "Sin asignatura",
+      lastActivity: "Última actividad",
+      documentsTotal: "Docs",
+      documentsReady: "Listos",
+      documentsProcessing: "Procesando",
+      noDescription: "Añade una breve descripción para diferenciar mejor este proyecto.",
+      loadingProjects: "Cargando proyectos...",
+      emptyTitle: "No hay proyectos para esta vista",
+      emptyDescription: "Crea un proyecto o ajusta la búsqueda para recuperar tu hub de estudio.",
+      emptyArchived: "No hay proyectos archivados ahora mismo.",
     },
     workspace: {
       back: "Volver",
-      documents: "Tus docs",
+      documents: "Tus documentos",
       preview: "Previsualización",
       chat: "Chat IA",
       upload: "Subir documentos",
@@ -78,6 +305,31 @@ const dictionaries = {
       processingHint:
         "Los archivos Office e imágenes se procesan en segundo plano y aparecerán aquí en cuanto estén listos.",
       unsupportedPreview: "El preview aparecerá cuando la conversión del archivo esté lista.",
+      switchProject: "Cambiar proyecto",
+      favorites: "Favoritos",
+      recent: "Recientes",
+      noProjects: "No hay más proyectos activos.",
+      editProject: "Editar proyecto",
+      documentsSearch: "Buscar",
+      includedInChat: "Incluido en chat",
+      addToChatScope: "Añadir al contexto",
+      selectedDocs: "docs seleccionados",
+      loadingPreview: "Cargando preview...",
+      noSubject: "Sin asignatura",
+      createModeTitle: "Nuevo proyecto",
+      editModeTitle: "Editar proyecto",
+      createHint: "Crea un espacio nuevo y aparecerá al instante en recientes.",
+      editHint: "Ajusta el nombre, la materia, la descripción o el color sin salir del workspace.",
+      name: "Nombre del proyecto",
+      descriptionField: "Descripción",
+      subject: "Asignatura",
+      accentColor: "Color de acento",
+      createCta: "Crear proyecto",
+      saveChanges: "Guardar cambios",
+      cancelEdit: "Cancelar",
+      projectFallbackTitle: "Proyecto",
+      roleUser: "Usuario",
+      roleAssistant: "Asistente",
     },
     common: {
       loading: "Cargando...",
@@ -85,8 +337,34 @@ const dictionaries = {
       language: "Idioma",
       demo: "Demo",
       firebase: "Firebase",
-      online: "Online",
+      online: "En línea",
       offline: "Sin configurar",
+      notFoundTitle: "Página no encontrada",
+      notFoundDescription:
+        "La ruta solicitada no existe o el segmento de idioma no es válido.",
+    },
+    errors: {
+      authenticationFailed: "No se pudo completar la autenticación.",
+      unableToSyncSession: "No se pudo sincronizar la sesión.",
+      unableToLoadProjects: "No se pudieron cargar los proyectos.",
+      unableToSaveProject: "No se pudo guardar el proyecto.",
+      unableToUpdateProject: "No se pudo actualizar el proyecto.",
+      unableToDeleteProject: "No se pudo borrar el proyecto.",
+      unableToLoadProject: "No se pudo cargar el proyecto.",
+      unableToLoadMessages: "No se pudieron cargar los mensajes.",
+      unableToRefreshProject: "No se pudo refrescar el proyecto.",
+      unableToLoadPreview: "No se pudo cargar la vista previa.",
+      unableToUploadDocuments: "No se pudieron subir los documentos.",
+      unableToSendMessage: "No se pudo enviar el mensaje.",
+      projectNotFound: "Proyecto no encontrado.",
+      documentNotFound: "Documento no encontrado.",
+      archiveBeforeDelete: "Archiva el proyecto antes de borrarlo definitivamente.",
+      unsupportedFileType: "Tipo de archivo no compatible.",
+      missingFiles: "Faltan archivos por subir.",
+      unableToCreateSession: "No se pudo crear la sesión.",
+      missingAuthorization: "Falta autorización.",
+      unableToLoadAsset: "No se pudo cargar el recurso.",
+      unableToGenerateAnswer: "No se pudo generar la respuesta.",
     },
   },
   en: {
@@ -96,6 +374,7 @@ const dictionaries = {
       workspace: "Workspace",
       login: "Sign in",
       logout: "Sign out",
+      tagline: "AI study workspace",
     },
     landing: {
       eyebrow: "AI academic workspace",
@@ -109,6 +388,16 @@ const dictionaries = {
         "Central preview pane to keep visual context.",
         "Async processing pipeline ready for OCR and conversions.",
       ],
+      studioTitle: "Studio view",
+      studioChatTitle: "Chat over docs",
+      studioChatDescription:
+        "Ask about an exam topic, a slide, or a proof. The assistant keeps citations attached.",
+      studioProcessingTitle: "Processing lane",
+      studioProcessingDescription:
+        "Async jobs keep Office conversion, OCR, and indexing off the critical UX path.",
+      workspaceTitle: "Three-pane workspace",
+      workspaceDescription:
+        "Docs on the left, preview in the middle, AI on the right. Mobile collapses into focused tabs.",
     },
     auth: {
       title: "Your academic copilot is ready",
@@ -124,23 +413,61 @@ const dictionaries = {
       toggleToSignIn: "I already have one",
       demoHint:
         "Without Firebase config, the app falls back to a persistent local demo mode.",
+      modeFirebase: "Firebase Auth",
+      modeDemo: "Local Demo",
+      statusLive: "LIVE",
+      statusDemo: "DEMO",
     },
     dashboard: {
       eyebrow: "Your study spaces",
-      title: "Projects organized by subject, course, or exam.",
+      title: "Manage projects, priorities, and context from one hub.",
       description:
-        "Create one project per class and let the assistant connect chat, documents, and context.",
-      createTitle: "New project",
+        "Organize by subject or exam, pin what matters, archive what is done, and jump into the right workspace faster.",
+      createModeTitle: "New project",
+      editModeTitle: "Edit project",
+      createHint: "Create a new study space and it will appear in recents immediately.",
+      editHint: "Update the name, subject, description, or color of the current project.",
       name: "Project name",
       descriptionField: "Description",
       subject: "Subject",
-      accentColor: "Color",
+      accentColor: "Accent color",
       createCta: "Create project",
-      emptyTitle: "No projects yet",
-      emptyDescription: "Create your first one to upload documents and chat with the assistant.",
+      saveChanges: "Save changes",
+      cancelEdit: "Cancel",
+      searchPlaceholder: "Search by name, subject, or description",
+      sortLabel: "Sort",
+      sortUpdated: "Recent activity",
+      sortName: "Name",
+      sortSubject: "Subject",
+      allFilter: "All",
+      favoriteFilter: "Favorites only",
+      activeProjects: "Active",
+      favoritesCounter: "Favorites",
+      archivedCounter: "Archived",
+      favoritesSection: "Favorites",
+      recentSection: "Recent",
+      allSection: "All projects",
+      archivedSection: "Archived",
+      archivedToggle: "View archived",
+      archivedClose: "Close archived",
       openProject: "Open project",
-      documents: "documents",
-      chatReady: "Chat ready",
+      editProject: "Edit",
+      favorite: "Pin",
+      unfavorite: "Unpin",
+      archive: "Archive",
+      restore: "Restore",
+      delete: "Delete",
+      deleteConfirm: "This project will be permanently deleted. This action cannot be undone.",
+      noSubject: "No subject",
+      lastActivity: "Last activity",
+      documentsTotal: "Docs",
+      documentsReady: "Ready",
+      documentsProcessing: "Processing",
+      noDescription: "Add a short description to make this project easier to scan.",
+      loadingProjects: "Loading projects...",
+      emptyTitle: "No projects match this view",
+      emptyDescription: "Create a project or adjust your search to rebuild your study hub.",
+      emptyArchived: "There are no archived projects right now.",
     },
     workspace: {
       back: "Back",
@@ -166,6 +493,31 @@ const dictionaries = {
       processingHint:
         "Office files and images are processed in the background and will appear here as soon as they are ready.",
       unsupportedPreview: "Preview will appear once the file conversion is ready.",
+      switchProject: "Switch project",
+      favorites: "Favorites",
+      recent: "Recent",
+      noProjects: "No more active projects.",
+      editProject: "Edit project",
+      documentsSearch: "Search",
+      includedInChat: "Included in chat",
+      addToChatScope: "Add to scope",
+      selectedDocs: "docs selected",
+      loadingPreview: "Loading preview...",
+      noSubject: "No subject",
+      createModeTitle: "New project",
+      editModeTitle: "Edit project",
+      createHint: "Create a new study space and it will appear in recents immediately.",
+      editHint: "Adjust the name, subject, description, or color without leaving the workspace.",
+      name: "Project name",
+      descriptionField: "Description",
+      subject: "Subject",
+      accentColor: "Accent color",
+      createCta: "Create project",
+      saveChanges: "Save changes",
+      cancelEdit: "Cancel",
+      projectFallbackTitle: "Project",
+      roleUser: "User",
+      roleAssistant: "Assistant",
     },
     common: {
       loading: "Loading...",
@@ -175,6 +527,32 @@ const dictionaries = {
       firebase: "Firebase",
       online: "Online",
       offline: "Not configured",
+      notFoundTitle: "Page not found",
+      notFoundDescription:
+        "The requested route does not exist or the locale segment is invalid.",
+    },
+    errors: {
+      authenticationFailed: "Authentication could not be completed.",
+      unableToSyncSession: "Unable to sync session.",
+      unableToLoadProjects: "Unable to load projects.",
+      unableToSaveProject: "Unable to save project.",
+      unableToUpdateProject: "Unable to update project.",
+      unableToDeleteProject: "Unable to delete project.",
+      unableToLoadProject: "Unable to load project.",
+      unableToLoadMessages: "Unable to load messages.",
+      unableToRefreshProject: "Unable to refresh project.",
+      unableToLoadPreview: "Unable to load preview.",
+      unableToUploadDocuments: "Unable to upload documents.",
+      unableToSendMessage: "Unable to send message.",
+      projectNotFound: "Project not found.",
+      documentNotFound: "Document not found.",
+      archiveBeforeDelete: "Archive the project before deleting it permanently.",
+      unsupportedFileType: "Unsupported file type.",
+      missingFiles: "Missing files.",
+      unableToCreateSession: "Unable to create session.",
+      missingAuthorization: "Missing authorization.",
+      unableToLoadAsset: "Unable to load asset.",
+      unableToGenerateAnswer: "Unable to generate answer.",
     },
   },
 } as const;

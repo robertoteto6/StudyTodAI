@@ -2,6 +2,11 @@
 
 StudyTodAI is a `Next.js` academic workspace built around project-based document ingestion, preview, and AI chat.
 
+## Release line
+
+- `v1.0.0`: baseline version currently published on GitHub.
+- `v1.1.0`: current local release candidate with the new dashboard, project management, and localization improvements documented in [`CHANGELOG.md`](./CHANGELOG.md).
+
 ## Stack
 
 - `Next.js 16` with App Router and TypeScript
