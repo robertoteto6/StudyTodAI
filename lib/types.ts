@@ -1,3 +1,5 @@
+import { type ProjectIconKey } from "@/lib/constants";
+
 export const SUPPORTED_LOCALES = ["es", "en"] as const;
 
 export type Locale = (typeof SUPPORTED_LOCALES)[number];
@@ -19,6 +21,7 @@ export type Project = {
   description: string;
   subject: string;
   accentColor: string;
+  icon: ProjectIconKey;
   isFavorite: boolean;
   archivedAt: string | null;
   createdAt: string;
@@ -119,6 +122,7 @@ export type ProjectInput = {
   description: string;
   subject: string;
   accentColor: string;
+  icon: ProjectIconKey;
 };
 
 export type AIProvider = {

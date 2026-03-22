@@ -6,11 +6,13 @@ import { useRouter } from "next/navigation";
 import { startTransition, useDeferredValue, useEffect, useEffectEvent, useRef, useState } from "react";
 import { ArrowLeft, FileUp, PencilLine, SendHorizontal } from "lucide-react";
 import { useAuth } from "@/components/auth/auth-provider";
+import { ProjectAvatar } from "@/components/project/project-avatar";
 import { ProjectForm, type ProjectFormValues } from "@/components/project/project-form";
 import { ProjectSwitcher } from "@/components/project/project-switcher";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { StatusChip } from "@/components/ui/status-chip";
+import { DEFAULT_PROJECT_ICON, DEFAULT_PROJECT_STYLE } from "@/lib/constants";
 import { localizeErrorMessage } from "@/lib/i18n/error-messages";
 import { type AppDictionary } from "@/lib/i18n/dictionaries";
 import { formatDate, formatFileSize } from "@/lib/utils";
@@ -31,7 +33,8 @@ const EMPTY_PROJECT_FORM: ProjectFormValues = {
   name: "",
   description: "",
   subject: "",
-  accentColor: "#0f766e",
+  accentColor: DEFAULT_PROJECT_STYLE,
+  icon: DEFAULT_PROJECT_ICON,
 };
 
 function documentStatusLabel(status: DocumentRecord["status"], dictionary: AppDictionary["workspace"]) {
@@ -123,6 +126,7 @@ export function WorkspaceShell({
         description: payload.project.description,
         subject: payload.project.subject,
         accentColor: payload.project.accentColor,
+        icon: payload.project.icon,
       });
       setDocuments(payload.documents);
       setActiveChatId(payload.activeChat.id);
@@ -514,9 +518,16 @@ export function WorkspaceShell({
             <ArrowLeft className="h-4 w-4" />
             {copy.back}
           </Link>
-          <h1 className="mt-2 text-4xl">
-            {loadingProject ? "..." : project?.name ?? copy.projectFallbackTitle}
-          </h1>
+          <div className="mt-3 flex items-center gap-4">
+            <ProjectAvatar
+              accentColor={project?.accentColor}
+              icon={project?.icon}
+              size="lg"
+            />
+            <h1 className="text-4xl">
+              {loadingProject ? "..." : project?.name ?? copy.projectFallbackTitle}
+            </h1>
+          </div>
           {project?.description ? (
             <p className="mt-2 max-w-2xl text-sm leading-6 text-[var(--color-ink-soft)]">
               {project.description}
@@ -582,6 +593,7 @@ export function WorkspaceShell({
                       description: project.description,
                       subject: project.subject,
                       accentColor: project.accentColor,
+                      icon: project.icon,
                     }
                   : EMPTY_PROJECT_FORM,
               );

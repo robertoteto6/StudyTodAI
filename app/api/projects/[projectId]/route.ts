@@ -1,6 +1,10 @@
 import { z } from "zod";
 import { NextResponse } from "next/server";
-import { PROJECT_ACCENT_COLORS } from "@/lib/constants";
+import {
+  PROJECT_ACCENT_COLORS,
+  PROJECT_ICON_OPTIONS,
+  type ProjectIconKey,
+} from "@/lib/constants";
 import {
   archiveProject,
   deleteProjectCascade,
@@ -20,7 +24,18 @@ const projectPatchSchema = z.object({
   subject: z.string().max(80).optional(),
   accentColor: z
     .string()
-    .refine((value) => PROJECT_ACCENT_COLORS.includes(value), "Invalid accent color")
+    .refine(
+      (value) => PROJECT_ACCENT_COLORS.some((accentColor) => accentColor === value),
+      "Invalid accent color",
+    )
+    .optional(),
+  icon: z
+    .string()
+    .refine(
+      (value) => PROJECT_ICON_OPTIONS.some((option) => option.value === value),
+      "Invalid project icon",
+    )
+    .transform((value) => value as ProjectIconKey)
     .optional(),
   isFavorite: z.boolean().optional(),
   archived: z.boolean().optional(),
@@ -82,6 +97,7 @@ export async function PATCH(
         description: payload.description,
         subject: payload.subject,
         accentColor: payload.accentColor,
+        icon: payload.icon,
         isFavorite: payload.isFavorite,
       }).filter(([, value]) => value !== undefined),
     );

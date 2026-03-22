@@ -20,9 +20,11 @@ import {
   useState,
 } from "react";
 import { useAuth } from "@/components/auth/auth-provider";
+import { ProjectAvatar } from "@/components/project/project-avatar";
 import { ProjectForm, type ProjectFormValues } from "@/components/project/project-form";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { DEFAULT_PROJECT_ICON, DEFAULT_PROJECT_STYLE } from "@/lib/constants";
 import { localizeErrorMessage } from "@/lib/i18n/error-messages";
 import { type AppDictionary } from "@/lib/i18n/dictionaries";
 import { type Locale, type Project, type ProjectListItem } from "@/lib/types";
@@ -32,7 +34,8 @@ const EMPTY_FORM: ProjectFormValues = {
   name: "",
   description: "",
   subject: "",
-  accentColor: "#0f766e",
+  accentColor: DEFAULT_PROJECT_STYLE,
+  icon: DEFAULT_PROJECT_ICON,
 };
 
 type SortMode = "updated" | "name" | "subject";
@@ -145,6 +148,7 @@ export function DashboardShell({
       description: project.description,
       subject: project.subject,
       accentColor: project.accentColor,
+      icon: project.icon,
     });
     setShowEditor(true);
   }
@@ -375,14 +379,17 @@ export function DashboardShell({
           <div className="min-w-0">
             <div className="flex items-center gap-3">
               <span
-                className="h-3.5 w-3.5 rounded-full"
-                style={{ backgroundColor: project.accentColor }}
-              />
+                className="shrink-0"
+              >
+                <ProjectAvatar accentColor={project.accentColor} icon={project.icon} size="sm" />
+              </span>
               <p className="truncate text-lg font-semibold">{project.name}</p>
             </div>
-            <p className="caps-label mt-2 text-xs text-[var(--color-ink-soft)]">
-              {project.subject || copy.noSubject}
-            </p>
+            {project.subject ? (
+              <p className="caps-label mt-2 text-xs text-[var(--color-ink-soft)]">
+                {project.subject}
+              </p>
+            ) : null}
           </div>
           {project.isFavorite && !archived ? (
             <span className="inline-flex rounded-full bg-[var(--color-accent-soft)] p-2 text-[var(--color-accent-strong)]">
@@ -721,12 +728,7 @@ export function DashboardShell({
                 <div className="mt-5 flex flex-wrap items-center gap-3">
                   <Button
                     type="button"
-                    onClick={() =>
-                      openCreateEditor({
-                        ...EMPTY_FORM,
-                        subject: copy.emptySuggestedSubject,
-                      })
-                    }
+                    onClick={() => openCreateEditor()}
                   >
                     <Plus className="mr-2 h-4 w-4" />
                     {copy.emptyFirstCta}

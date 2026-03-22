@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useState } from "react";
 import { ChevronDown, Clock3, Star } from "lucide-react";
+import { ProjectAvatar } from "@/components/project/project-avatar";
 import { Button } from "@/components/ui/button";
 import { type Locale, type ProjectListItem } from "@/lib/types";
 import { cn, formatDate } from "@/lib/utils";
@@ -63,14 +64,11 @@ export function ProjectSwitcher({
                     <div className="flex items-center justify-between gap-3">
                       <div>
                         <p className="text-sm font-semibold">{project.name}</p>
-                        <p className="text-xs text-[var(--color-ink-soft)]">
-                          {project.subject || dictionary.noSubject}
-                        </p>
+                        {project.subject ? (
+                          <p className="text-xs text-[var(--color-ink-soft)]">{project.subject}</p>
+                        ) : null}
                       </div>
-                      <span
-                        className="h-3.5 w-3.5 rounded-full"
-                        style={{ backgroundColor: project.accentColor }}
-                      />
+                      <ProjectAvatar accentColor={project.accentColor} icon={project.icon} size="sm" />
                     </div>
                   </Link>
                 ))
@@ -101,10 +99,7 @@ export function ProjectSwitcher({
                           {formatDate(project.updatedAt, locale)}
                         </p>
                       </div>
-                      <span
-                        className="h-3.5 w-3.5 rounded-full"
-                        style={{ backgroundColor: project.accentColor }}
-                      />
+                      <ProjectAvatar accentColor={project.accentColor} icon={project.icon} size="sm" />
                     </div>
                   </Link>
                 ))

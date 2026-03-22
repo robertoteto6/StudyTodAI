@@ -1,6 +1,11 @@
 import { z } from "zod";
 import { NextResponse } from "next/server";
-import { PROJECT_ACCENT_COLORS } from "@/lib/constants";
+import {
+  DEFAULT_PROJECT_ICON,
+  PROJECT_ACCENT_COLORS,
+  PROJECT_ICON_OPTIONS,
+  type ProjectIconKey,
+} from "@/lib/constants";
 import { createProject, listProjectListItems, upsertUser } from "@/lib/server/data-store";
 import { requireRequestUser } from "@/lib/server/auth";
 import { jsonError } from "@/lib/server/http";
@@ -13,7 +18,18 @@ const projectSchema = z.object({
   subject: z.string().max(80).default(""),
   accentColor: z
     .string()
-    .refine((value) => PROJECT_ACCENT_COLORS.includes(value), "Invalid accent color"),
+    .refine(
+      (value) => PROJECT_ACCENT_COLORS.some((accentColor) => accentColor === value),
+      "Invalid accent color",
+    ),
+  icon: z
+    .string()
+    .refine(
+      (value) => PROJECT_ICON_OPTIONS.some((option) => option.value === value),
+      "Invalid project icon",
+    )
+    .transform((value) => value as ProjectIconKey)
+    .default(DEFAULT_PROJECT_ICON),
 });
 
 export async function GET(request: Request) {

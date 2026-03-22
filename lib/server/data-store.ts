@@ -1,8 +1,12 @@
 import { promises as fs } from "node:fs";
 import path from "node:path";
 import { nanoid } from "nanoid";
+import {
+  DEFAULT_CHAT_TITLE,
+  DEFAULT_PROJECT_ICON,
+  DEFAULT_PROJECT_STYLE,
+} from "@/lib/constants";
 import { getAdminFirestore } from "@/lib/firebase/admin";
-import { DEFAULT_CHAT_TITLE } from "@/lib/constants";
 import { nowIso, safeJsonParse } from "@/lib/utils";
 import {
   type AuthUser,
@@ -63,6 +67,8 @@ async function writeDemoDatabase(data: DemoDatabase) {
 function normalizeProject(project: Project): Project {
   return {
     ...project,
+    accentColor: project.accentColor ?? DEFAULT_PROJECT_STYLE,
+    icon: project.icon ?? DEFAULT_PROJECT_ICON,
     isFavorite: project.isFavorite ?? false,
     archivedAt: project.archivedAt ?? null,
   };
@@ -149,6 +155,7 @@ export async function createProject(user: AuthUser, input: ProjectInput) {
     description: input.description,
     subject: input.subject,
     accentColor: input.accentColor,
+    icon: input.icon,
     isFavorite: false,
     archivedAt: null,
     createdAt: now,
@@ -275,7 +282,10 @@ export async function touchProject(projectId: string, userId: string) {
 }
 
 type ProjectPatch = Partial<
-  Pick<Project, "name" | "description" | "subject" | "accentColor" | "isFavorite" | "archivedAt">
+  Pick<
+    Project,
+    "name" | "description" | "subject" | "accentColor" | "icon" | "isFavorite" | "archivedAt"
+  >
 >;
 
 export async function updateProject(
