@@ -29,6 +29,7 @@ export default async function LocaleLayout({
         locale={locale}
         dashboardLabel={dictionary.nav.dashboard}
         loginLabel={dictionary.nav.login}
+        logoutLabel={dictionary.nav.logout}
       />
       {children}
     </div>

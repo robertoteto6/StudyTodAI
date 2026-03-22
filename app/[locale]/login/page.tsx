@@ -1,6 +1,8 @@
+import { redirect } from "next/navigation";
 import { AuthCard } from "@/components/auth/auth-card";
 import { getSafeLocale } from "@/lib/i18n/config";
 import { getDictionary } from "@/lib/i18n/dictionaries";
+import { getSessionUser } from "@/lib/server/auth";
 
 export default async function LoginPage({
   params,
@@ -9,6 +11,12 @@ export default async function LoginPage({
 }) {
   const { locale: rawLocale } = await params;
   const locale = getSafeLocale(rawLocale);
+  const user = await getSessionUser();
+
+  if (user) {
+    redirect(`/${locale}/projects`);
+  }
+
   const dictionary = getDictionary(locale);
 
   return (

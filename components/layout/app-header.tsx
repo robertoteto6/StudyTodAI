@@ -1,5 +1,11 @@
+"use client";
+
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
 import { Sparkles } from "lucide-react";
+import { useAuth } from "@/components/auth/auth-provider";
+import { Button } from "@/components/ui/button";
 import { LocaleSwitcher } from "@/components/layout/locale-switcher";
 import { type Locale } from "@/lib/types";
 
@@ -7,11 +13,29 @@ export function AppHeader({
   locale,
   dashboardLabel,
   loginLabel,
+  logoutLabel,
 }: {
   locale: Locale;
   dashboardLabel: string;
   loginLabel: string;
+  logoutLabel: string;
 }) {
+  const router = useRouter();
+  const { user, signOut } = useAuth();
+  const [busy, setBusy] = useState(false);
+
+  async function handleSignOut() {
+    setBusy(true);
+
+    try {
+      await signOut();
+      router.push(`/${locale}/login`);
+      router.refresh();
+    } finally {
+      setBusy(false);
+    }
+  }
+
   return (
     <header className="mx-auto flex w-full max-w-7xl items-center justify-between px-4 py-6 sm:px-6">
       <Link href={`/${locale}`} className="flex items-center gap-3">
@@ -29,10 +53,43 @@ export function AppHeader({
           <Link href={`/${locale}/projects`} className="rounded-full px-3 py-2 text-sm text-[var(--color-ink-soft)] hover:bg-white">
             {dashboardLabel}
           </Link>
-          <Link href={`/${locale}/login`} className="rounded-full px-3 py-2 text-sm text-[var(--color-ink-soft)] hover:bg-white">
+          {user ? (
+            <>
+              <span className="px-3 py-2 text-sm text-[var(--color-ink-soft)]">
+                {user.name}
+              </span>
+              <Button
+                className="px-3 py-2"
+                variant="ghost"
+                disabled={busy}
+                onClick={handleSignOut}
+              >
+                {logoutLabel}
+              </Button>
+            </>
+          ) : (
+            <Link href={`/${locale}/login`} className="rounded-full px-3 py-2 text-sm text-[var(--color-ink-soft)] hover:bg-white">
+              {loginLabel}
+            </Link>
+          )}
+        </nav>
+        {user ? (
+          <Button
+            className="sm:hidden"
+            variant="ghost"
+            disabled={busy}
+            onClick={handleSignOut}
+          >
+            {logoutLabel}
+          </Button>
+        ) : (
+          <Link
+            href={`/${locale}/login`}
+            className="rounded-full px-3 py-2 text-sm text-[var(--color-ink-soft)] hover:bg-white sm:hidden"
+          >
             {loginLabel}
           </Link>
-        </nav>
+        )}
         <LocaleSwitcher locale={locale} />
       </div>
     </header>
