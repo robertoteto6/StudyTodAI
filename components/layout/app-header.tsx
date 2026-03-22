@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useState } from "react";
 import { Sparkles } from "lucide-react";
 import { useAuth } from "@/components/auth/auth-provider";
@@ -18,8 +18,10 @@ export function AppHeader({
   dictionary: AppDictionary;
 }) {
   const router = useRouter();
+  const pathname = usePathname();
   const { user, signOut } = useAuth();
   const [busy, setBusy] = useState(false);
+  const isLandingRoute = pathname === `/${locale}`;
 
   async function handleSignOut() {
     setBusy(true);
@@ -32,6 +34,9 @@ export function AppHeader({
       setBusy(false);
     }
   }
+
+  const registerLinkClass =
+    "inline-flex items-center justify-center rounded-full bg-[var(--color-ink)] px-4 py-2 text-sm font-medium text-white transition-transform duration-200 hover:-translate-y-0.5 hover:bg-[var(--color-accent-strong)]";
 
   return (
     <header className="mx-auto flex w-full max-w-7xl items-center justify-between px-4 py-6 sm:px-6">
@@ -47,11 +52,20 @@ export function AppHeader({
 
       <div className="flex items-center gap-3">
         <nav className="hidden items-center gap-2 rounded-full border border-[var(--color-line)] bg-white/65 px-2 py-1 sm:flex">
-          <Link href={`/${locale}/projects`} className="rounded-full px-3 py-2 text-sm text-[var(--color-ink-soft)] hover:bg-white">
-            {dictionary.nav.dashboard}
-          </Link>
-          {user ? (
+          {isLandingRoute ? (
             <>
+              <Link href={`/${locale}/login`} className="rounded-full px-3 py-2 text-sm text-[var(--color-ink-soft)] hover:bg-white">
+                {dictionary.nav.login}
+              </Link>
+              <Link className={registerLinkClass} href={`/${locale}/login?mode=signup`}>
+                {dictionary.nav.register}
+              </Link>
+            </>
+          ) : user ? (
+            <>
+              <Link href={`/${locale}/projects`} className="rounded-full px-3 py-2 text-sm text-[var(--color-ink-soft)] hover:bg-white">
+                {dictionary.nav.dashboard}
+              </Link>
               <span className="px-3 py-2 text-sm text-[var(--color-ink-soft)]">
                 {user.name}
               </span>
@@ -70,7 +84,14 @@ export function AppHeader({
             </Link>
           )}
         </nav>
-        {user ? (
+        {isLandingRoute ? (
+          <Link
+            href={`/${locale}/login`}
+            className="rounded-full px-3 py-2 text-sm text-[var(--color-ink-soft)] hover:bg-white sm:hidden"
+          >
+            {dictionary.nav.login}
+          </Link>
+        ) : user ? (
           <Button
             className="sm:hidden"
             variant="ghost"

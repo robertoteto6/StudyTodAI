@@ -6,8 +6,9 @@
   --color-surface-strong: rgba(255, 252, 247, 0.94);
   --color-surface-dark: #10212b;
   --color-line: rgba(16, 33, 43, 0.12);
+  --color-line-strong: rgba(16, 33, 43, 0.18);
   --color-ink: #10212b;
-  --color-ink-soft: rgba(16, 33, 43, 0.72);
+  --color-ink-soft: rgba(16, 33, 43, 0.78);
   --color-accent: #0f766e;
   --color-accent-strong: #115e59;
   --color-accent-soft: rgba(15, 118, 110, 0.14);
@@ -19,7 +20,7 @@
   --shadow-soft: 0 12px 30px rgba(16, 33, 43, 0.06);
   --color-success-soft: rgba(22, 163, 74, 0.12);
   --color-warning-soft: rgba(245, 158, 11, 0.14);
-  --tracking-caps: 0.28em;
+  --tracking-caps: 0.18em;
 }
 
 @theme inline {
@@ -37,11 +38,13 @@ body {
   min-height: 100vh;
   margin: 0;
   font-family: var(--font-sans), sans-serif;
+  line-height: 1.55;
   background:
     radial-gradient(circle at top left, rgba(15, 118, 110, 0.18), transparent 30%),
     radial-gradient(circle at top right, rgba(239, 131, 84, 0.18), transparent 26%),
     linear-gradient(180deg, #f6f1e8 0%, #f2ede3 48%, #e8efe9 100%);
   color: var(--color-ink);
+  text-rendering: optimizeLegibility;
 }
 
 a {

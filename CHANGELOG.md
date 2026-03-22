@@ -2,6 +2,28 @@
 
 All notable product-facing changes for StudyTodAI are tracked here.
 
+## [1.1.2] - 2026-03-22
+
+Landing and access release focused on making the first visit clearer, more guided, and more consistent across languages and devices.
+
+### Added
+
+- A fully expanded landing page that now shows the actual study flow with product mockups, use cases, trust labels, and a clearer explanation of how the workspace works.
+- A dedicated register action in the public header, plus direct access to the sign-up tab from `?mode=signup`.
+- New ES/EN marketing copy for the landing experience, including feature highlights, workflow steps, use cases, and proof points.
+
+### Changed
+
+- Signed-in users are now redirected away from the public home and login pages straight into their project hub.
+- The public navigation now adapts to the landing route, showing login and register actions before authentication instead of dashboard-only links.
+- The language switcher now preserves query parameters, so changing language no longer drops the selected auth mode or similar public-page state.
+
+### Fixed
+
+- Landing typography now reads more comfortably thanks to stronger contrast, softer tracking in labels, and improved global text rendering.
+- The auth card can now open directly in sign-up mode without forcing users to manually switch tabs after navigating from the header.
+- The landing layout now explains the three-pane workspace more clearly on mobile with focused mockups instead of leaving the responsive behavior implicit.
+
 ## [1.1.1] - 2026-03-22
 
 Refinement release focused on making the project hub clearer to navigate, easier to start from zero, and more accessible across the app.

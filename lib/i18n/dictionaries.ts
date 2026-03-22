@@ -6,6 +6,7 @@ export type AppDictionary = {
     dashboard: string;
     workspace: string;
     login: string;
+    register: string;
     logout: string;
     tagline: string;
   };
@@ -15,7 +16,10 @@ export type AppDictionary = {
     description: string;
     primaryCta: string;
     secondaryCta: string;
-    bullets: readonly string[];
+    heroHighlights: readonly {
+      title: string;
+      description: string;
+    }[];
     studioTitle: string;
     studioChatTitle: string;
     studioChatDescription: string;
@@ -23,6 +27,25 @@ export type AppDictionary = {
     studioProcessingDescription: string;
     workspaceTitle: string;
     workspaceDescription: string;
+    howItWorksTitle: string;
+    howItWorksDescription: string;
+    howItWorksSteps: readonly {
+      title: string;
+      description: string;
+    }[];
+    useCasesTitle: string;
+    useCasesDescription: string;
+    useCases: readonly {
+      title: string;
+      description: string;
+    }[];
+    proofTitle: string;
+    proofDescription: string;
+    proofPoints: readonly {
+      title: string;
+      description: string;
+    }[];
+    trustLabels: readonly string[];
   };
   auth: {
     title: string;
@@ -193,6 +216,7 @@ const dictionaries: Record<Locale, AppDictionary> = {
       dashboard: "Proyectos",
       workspace: "Espacio",
       login: "Acceder",
+      register: "Registrarse",
       logout: "Salir",
       tagline: "Espacio de estudio con IA",
     },
@@ -200,24 +224,85 @@ const dictionaries: Record<Locale, AppDictionary> = {
       eyebrow: "Espacio académico con IA",
       title: "Convierte tus apuntes en un proyecto vivo de estudio.",
       description:
-        "Sube PDFs, presentaciones e imágenes de clase. Lee, conversa y recupera fragmentos clave desde un mismo espacio diseñado para estudiantes exigentes.",
+        "Para estudiantes universitarios que no quieren perderse nada en el examen. Sube PDFs, presentaciones e imágenes y estudia con contexto, citas y una vista clara del material.",
       primaryCta: "Entrar al dashboard",
-      secondaryCta: "Ver acceso",
-      bullets: [
-        "Chat por proyecto con citas al documento.",
-        "Vista previa central para mantener contexto visual.",
-        "Procesado asíncrono preparado para OCR y conversiones.",
+      secondaryCta: "Cómo funciona",
+      heroHighlights: [
+        {
+          title: "Chat con citas reales",
+          description: "Cada respuesta puede volver al documento, página o diapositiva exacta.",
+        },
+        {
+          title: "Vista previa central",
+          description: "Lees, señalas y repasas sin perder el hilo entre documentos y conversación.",
+        },
+        {
+          title: "Procesado en segundo plano",
+          description: "OCR, conversiones y preparación del contenido sin bloquear tu sesión de estudio.",
+        },
       ],
       studioTitle: "Vista del estudio",
       studioChatTitle: "Chat sobre documentos",
       studioChatDescription:
-        "Pregunta por un tema de examen, una diapositiva o una demostración. El asistente mantiene las citas vinculadas.",
+        "Pregunta por un tema de examen, una diapositiva o una demostración. El asistente mantiene las citas vinculadas y el contexto del proyecto.",
       studioProcessingTitle: "Carril de procesado",
       studioProcessingDescription:
-        "Los trabajos asíncronos mantienen la conversión de Office, el OCR y la indexación fuera de la ruta crítica de la experiencia.",
+        "Los trabajos asíncronos mantienen la conversión de Office, el OCR y la indexación fuera de la ruta crítica.",
       workspaceTitle: "Espacio de estudio de tres paneles",
       workspaceDescription:
         "Documentos a la izquierda, vista previa en el centro e IA a la derecha. En móvil se compacta en pestañas enfocadas.",
+      howItWorksTitle: "Cómo funciona",
+      howItWorksDescription:
+        "La landing ya no se queda en una promesa general: enseña exactamente cómo entras, organizas material y repasas con ayuda de la IA.",
+      howItWorksSteps: [
+        {
+          title: "1. Reúne el material del examen",
+          description: "Crea un proyecto por asignatura o parcial y sube PDFs, PPTX, DOCX o imágenes de clase.",
+        },
+        {
+          title: "2. Mantén el contexto visible",
+          description: "Selecciona un documento, abre la vista previa y acota el chat a lo que realmente quieres estudiar.",
+        },
+        {
+          title: "3. Repasa con trazabilidad",
+          description: "Pide resúmenes, conceptos o ejercicios y salta a la fuente cuando necesites comprobar algo.",
+        },
+      ],
+      useCasesTitle: "Casos de uso",
+      useCasesDescription:
+        "StudyTodAI no intenta ser una app genérica. Encaja mejor cuando necesitas estudiar rápido, con material disperso y poco margen para perder tiempo.",
+      useCases: [
+        {
+          title: "Repaso antes del parcial",
+          description: "Cruza apuntes, diapositivas y prácticas para detectar qué entra y qué lagunas te quedan.",
+        },
+        {
+          title: "Preparación oral o exposición",
+          description: "Encuentra ejemplos, definiciones y fragmentos clave sin navegar manualmente por cada archivo.",
+        },
+        {
+          title: "Semana de entregas",
+          description: "Centraliza el material de una asignatura y cambia entre documentos, preview y chat desde móvil o desktop.",
+        },
+      ],
+      proofTitle: "Lo que verás al entrar",
+      proofDescription:
+        "En vez de dejar huecos vacíos, la home refleja la estructura real del producto y sus señales de confianza.",
+      proofPoints: [
+        {
+          title: "Jerarquía clara",
+          description: "Un hero con contexto visual inmediato, CTAs diferenciados y bloques que guían el recorrido.",
+        },
+        {
+          title: "Texto más legible",
+          description: "Más contraste, mayor cuerpo en descripciones y un tracking menos agresivo en etiquetas.",
+        },
+        {
+          title: "Responsive de verdad",
+          description: "La idea de los tres paneles también se entiende en móvil mediante tabs y mockups compactos.",
+        },
+      ],
+      trustLabels: ["PDF", "PPTX", "DOCX", "OCR", "Citas", "Preview", "Móvil"],
     },
     auth: {
       title: "Tu asistente académico te espera",
@@ -391,6 +476,7 @@ const dictionaries: Record<Locale, AppDictionary> = {
       dashboard: "Projects",
       workspace: "Workspace",
       login: "Sign in",
+      register: "Register",
       logout: "Sign out",
       tagline: "AI study workspace",
     },
@@ -398,24 +484,85 @@ const dictionaries: Record<Locale, AppDictionary> = {
       eyebrow: "AI academic workspace",
       title: "Turn class material into a living study project.",
       description:
-        "Upload PDFs, slides, and images. Read, chat, and recover the right fragment from one workspace designed for serious students.",
+        "For university students who do not want to miss anything on the exam. Upload PDFs, slides, and images, then study with citations, structure, and a clear view of the material.",
       primaryCta: "Open dashboard",
-      secondaryCta: "Go to login",
-      bullets: [
-        "Project-level chat with document citations.",
-        "Central preview pane to keep visual context.",
-        "Async processing pipeline ready for OCR and conversions.",
+      secondaryCta: "See how it works",
+      heroHighlights: [
+        {
+          title: "Chat with real citations",
+          description: "Every answer can point back to the exact document, page, or slide.",
+        },
+        {
+          title: "Central preview pane",
+          description: "Read, inspect, and review without losing the thread between source material and chat.",
+        },
+        {
+          title: "Background processing",
+          description: "OCR, conversions, and indexing happen off the critical path of the study session.",
+        },
       ],
       studioTitle: "Studio view",
       studioChatTitle: "Chat over docs",
       studioChatDescription:
-        "Ask about an exam topic, a slide, or a proof. The assistant keeps citations attached.",
+        "Ask about an exam topic, a slide, or a proof. The assistant keeps citations attached and project context in view.",
       studioProcessingTitle: "Processing lane",
       studioProcessingDescription:
         "Async jobs keep Office conversion, OCR, and indexing off the critical UX path.",
       workspaceTitle: "Three-pane workspace",
       workspaceDescription:
         "Docs on the left, preview in the middle, AI on the right. Mobile collapses into focused tabs.",
+      howItWorksTitle: "How it works",
+      howItWorksDescription:
+        "The landing no longer stops at a broad promise. It shows how you enter, organize material, and review with AI support.",
+      howItWorksSteps: [
+        {
+          title: "1. Collect exam material",
+          description: "Create one project per subject or test and upload PDFs, PPTX, DOCX, or class images.",
+        },
+        {
+          title: "2. Keep context visible",
+          description: "Select a document, open the preview, and scope the chat to the exact material you want to study.",
+        },
+        {
+          title: "3. Review with traceability",
+          description: "Ask for summaries, concepts, or exercises and jump back to the source whenever you need to verify.",
+        },
+      ],
+      useCasesTitle: "Use cases",
+      useCasesDescription:
+        "StudyTodAI is not trying to be a generic notes app. It fits best when time is short and your material is scattered.",
+      useCases: [
+        {
+          title: "Pre-exam review",
+          description: "Cross notes, slides, and practice sets to see what is likely to matter and what you still miss.",
+        },
+        {
+          title: "Oral prep or presentation",
+          description: "Find examples, definitions, and key passages without manually opening every file.",
+        },
+        {
+          title: "Assignment-heavy weeks",
+          description: "Centralize one subject, then switch between docs, preview, and chat from desktop or mobile.",
+        },
+      ],
+      proofTitle: "What you see before you trust it",
+      proofDescription:
+        "Instead of leaving dead space, the home reflects the real product structure and clearer trust signals.",
+      proofPoints: [
+        {
+          title: "Clear hierarchy",
+          description: "A hero with immediate product context, distinct CTAs, and sections that guide the scroll.",
+        },
+        {
+          title: "More readable copy",
+          description: "Higher contrast, larger supporting text, and less aggressive tracking in labels.",
+        },
+        {
+          title: "Responsive by design",
+          description: "The three-pane workspace is also explained on mobile through focused tabs and compact mockups.",
+        },
+      ],
+      trustLabels: ["PDF", "PPTX", "DOCX", "OCR", "Citations", "Preview", "Mobile"],
     },
     auth: {
       title: "Your academic copilot is ready",

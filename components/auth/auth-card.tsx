@@ -11,13 +11,18 @@ import { type AppDictionary } from "@/lib/i18n/dictionaries";
 type AuthCardProps = {
   locale: string;
   dictionary: AppDictionary;
+  initialMode?: "signin" | "signup";
 };
 
-export function AuthCard({ locale, dictionary }: AuthCardProps) {
+export function AuthCard({
+  locale,
+  dictionary,
+  initialMode = "signin",
+}: AuthCardProps) {
   const router = useRouter();
   const { authMode, signInWithEmail, signUpWithEmail, signInWithGoogle } = useAuth();
   const copy = dictionary.auth;
-  const [mode, setMode] = useState<"signin" | "signup">("signin");
+  const [mode, setMode] = useState<"signin" | "signup">(initialMode);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
