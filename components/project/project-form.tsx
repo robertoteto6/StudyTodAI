@@ -26,6 +26,7 @@ type ProjectFormDictionary = {
   projectIcon: string;
   colorPalette: string;
   previewTitle: string;
+  projectIconLabels: Record<string, string>;
   createCta: string;
   saveChanges: string;
   cancelEdit: string;
@@ -92,6 +93,8 @@ export function ProjectForm({
           projectIcon: dictionary.projectIcon,
           accentColor: dictionary.accentColor,
           previewTitle: dictionary.previewTitle,
+          colorPalette: dictionary.colorPalette,
+          projectIconLabels: dictionary.projectIconLabels,
         }}
         onChange={onChange}
       />

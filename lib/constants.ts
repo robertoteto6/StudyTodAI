@@ -34,17 +34,53 @@ export const PROJECT_STYLE_OPTIONS = [
     accentColor: "#4f46e5",
     gradient: "linear-gradient(135deg, #818cf8 0%, #4f46e5 48%, #1e1b4b 100%)",
   },
+  {
+    accentColor: "#0891b2",
+    gradient: "linear-gradient(135deg, #99f6e4 0%, #14b8a6 45%, #0f172a 100%)",
+  },
+  {
+    accentColor: "#2563eb",
+    gradient: "linear-gradient(135deg, #bfdbfe 0%, #2563eb 52%, #172554 100%)",
+  },
+  {
+    accentColor: "#9333ea",
+    gradient: "linear-gradient(135deg, #e9d5ff 0%, #a855f7 48%, #3b0764 100%)",
+  },
+  {
+    accentColor: "#dc2626",
+    gradient: "linear-gradient(135deg, #fecaca 0%, #ef4444 46%, #450a0a 100%)",
+  },
+  {
+    accentColor: "#d97706",
+    gradient: "linear-gradient(135deg, #fde68a 0%, #f59e0b 46%, #451a03 100%)",
+  },
+  {
+    accentColor: "#059669",
+    gradient: "linear-gradient(135deg, #bbf7d0 0%, #10b981 46%, #052e16 100%)",
+  },
 ] as const;
 
 export const PROJECT_ICON_OPTIONS = [
-  { value: "book-open", label: "Book" },
-  { value: "graduation-cap", label: "Cap" },
-  { value: "brain", label: "Brain" },
-  { value: "lightbulb", label: "Lightbulb" },
-  { value: "rocket", label: "Rocket" },
-  { value: "target", label: "Target" },
-  { value: "flask", label: "Flask" },
-  { value: "pen-tool", label: "Pen" },
+  { value: "book-open", label: "Library" },
+  { value: "notebook-pen", label: "Notes" },
+  { value: "file-text", label: "Reading" },
+  { value: "calculator", label: "Math" },
+  { value: "sigma", label: "Formula" },
+  { value: "brain", label: "Thinking" },
+  { value: "code", label: "Coding" },
+  { value: "languages", label: "Languages" },
+  { value: "globe", label: "World" },
+  { value: "microscope", label: "Science" },
+  { value: "flask", label: "Lab" },
+  { value: "landmark", label: "History" },
+  { value: "folder-kanban", label: "Planning" },
+  { value: "drafting-compass", label: "Design" },
+  { value: "lightbulb", label: "Ideas" },
+  { value: "target", label: "Goals" },
+  { value: "briefcase", label: "Business" },
+  { value: "graduation-cap", label: "Degree" },
+  { value: "rocket", label: "Launch" },
+  { value: "sparkles", label: "Creative" },
 ] as const;
 
 export type ProjectIconKey = (typeof PROJECT_ICON_OPTIONS)[number]["value"];
