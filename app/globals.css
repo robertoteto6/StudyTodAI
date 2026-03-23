@@ -1,6 +1,7 @@
 @import "tailwindcss";
 
 :root {
+  color-scheme: light;
   --color-canvas: #f3efe7;
   --color-surface: rgba(255, 252, 247, 0.82);
   --color-surface-strong: rgba(255, 252, 247, 0.94);
@@ -64,6 +65,39 @@ select {
 
 ::selection {
   background: rgba(15, 118, 110, 0.18);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    color-scheme: dark;
+    --color-canvas: #071219;
+    --color-surface: rgba(9, 18, 24, 0.82);
+    --color-surface-strong: rgba(12, 23, 31, 0.94);
+    --color-surface-dark: #02060a;
+    --color-line: rgba(210, 224, 235, 0.12);
+    --color-ink: #e6edf2;
+    --color-ink-soft: rgba(230, 237, 242, 0.72);
+    --color-accent: #2dd4bf;
+    --color-accent-strong: #5eead4;
+    --color-accent-soft: rgba(45, 212, 191, 0.16);
+    --color-focus-ring: #5eead4;
+    --color-focus-ring-soft: rgba(94, 234, 212, 0.24);
+    --shadow-panel: 0 18px 50px rgba(2, 6, 10, 0.46);
+    --shadow-soft: 0 12px 30px rgba(2, 6, 10, 0.32);
+    --color-success-soft: rgba(74, 222, 128, 0.16);
+    --color-warning-soft: rgba(251, 191, 36, 0.16);
+  }
+
+  body {
+    background:
+      radial-gradient(circle at top left, rgba(45, 212, 191, 0.14), transparent 28%),
+      radial-gradient(circle at top right, rgba(129, 140, 248, 0.16), transparent 30%),
+      linear-gradient(180deg, #071219 0%, #0b1721 52%, #0e2230 100%);
+  }
+
+  ::selection {
+    background: rgba(45, 212, 191, 0.24);
+  }
 }
 
 .glass-panel {

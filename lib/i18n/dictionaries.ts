@@ -54,9 +54,11 @@ export type AppDictionary = {
     name: string;
     descriptionField: string;
     subject: string;
+    appearanceTitle: string;
     accentColor: string;
     projectIcon: string;
     colorPalette: string;
+    previewTitle: string;
     createCta: string;
     createSuccess: string;
     saveChanges: string;
@@ -141,9 +143,11 @@ export type AppDictionary = {
     name: string;
     descriptionField: string;
     subject: string;
+    appearanceTitle: string;
     accentColor: string;
     projectIcon: string;
     colorPalette: string;
+    previewTitle: string;
     createCta: string;
     saveChanges: string;
     cancelEdit: string;
@@ -256,9 +260,11 @@ const dictionaries: Record<Locale, AppDictionary> = {
       name: "Nombre del proyecto",
       descriptionField: "Descripción",
       subject: "Asignatura",
-      accentColor: "Estilo visual",
+      appearanceTitle: "Personaliza tu proyecto",
+      accentColor: "Color",
       projectIcon: "Símbolo",
       colorPalette: "Paleta",
+      previewTitle: "Preview final",
       createCta: "Crear proyecto",
       createSuccess: "Proyecto creado correctamente.",
       saveChanges: "Guardar cambios",
@@ -345,9 +351,11 @@ const dictionaries: Record<Locale, AppDictionary> = {
       name: "Nombre del proyecto",
       descriptionField: "Descripción",
       subject: "Asignatura",
-      accentColor: "Estilo visual",
+      appearanceTitle: "Personaliza tu proyecto",
+      accentColor: "Color",
       projectIcon: "Símbolo",
       colorPalette: "Paleta",
+      previewTitle: "Preview final",
       createCta: "Crear proyecto",
       saveChanges: "Guardar cambios",
       cancelEdit: "Cancelar",
@@ -457,9 +465,11 @@ const dictionaries: Record<Locale, AppDictionary> = {
       name: "Project name",
       descriptionField: "Description",
       subject: "Subject",
-      accentColor: "Visual style",
+      appearanceTitle: "Customize your project",
+      accentColor: "Color",
       projectIcon: "Symbol",
       colorPalette: "Palette",
+      previewTitle: "Final preview",
       createCta: "Create project",
       createSuccess: "Project created successfully.",
       saveChanges: "Save changes",
@@ -546,9 +556,11 @@ const dictionaries: Record<Locale, AppDictionary> = {
       name: "Project name",
       descriptionField: "Description",
       subject: "Subject",
-      accentColor: "Visual style",
+      appearanceTitle: "Customize your project",
+      accentColor: "Color",
       projectIcon: "Symbol",
       colorPalette: "Palette",
+      previewTitle: "Final preview",
       createCta: "Create project",
       saveChanges: "Save changes",
       cancelEdit: "Cancel",
